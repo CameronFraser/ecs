@@ -23,6 +23,10 @@ namespace ECS.Scenes
 
         }
 
+        public override void UnloadContent()
+        {
+        }
+
         public override void Update(GameTime gameTime)
         {
 

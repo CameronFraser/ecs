@@ -59,21 +59,13 @@ namespace ECS
         {
             Scene scene;
             SceneCollection.TryGetValue(name, out scene);
-
-            SetAllScenesInactive();
+            activeScene.UnloadContent();
+            activeScene.IsActive = false;
 
             scene.IsActive = true;
             scene.Initialize();
             scene.LoadContent(spriteBatch);
             activeScene = scene;
-        }
-
-        private void SetAllScenesInactive()
-        {
-            foreach (KeyValuePair<string, Scene> sceneEntry in SceneCollection)
-            {
-                sceneEntry.Value.IsActive = false;
-            }
         }
 
         public void Print()

@@ -8,6 +8,7 @@ namespace ECS.Scenes
     class GameScene : Scene
     {
         private Color BackgroundColor = Color.Blue;
+        private ContentManager content;
         private SpriteFont font;
 
         public GameScene(string sceneName, bool isActive)
@@ -25,6 +26,11 @@ namespace ECS.Scenes
         {
             Console.WriteLine("Load Content");
             font = content.Load<SpriteFont>("arial");
+        }
+
+        public override void UnloadContent()
+        {
+            
         }
 
         public override void Update(GameTime gameTime)

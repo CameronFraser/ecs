@@ -15,6 +15,7 @@ namespace ECS
 
         public abstract void Initialize();
         public abstract void LoadContent(SpriteBatch spriteBatch);
+        public abstract void UnloadContent();
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
 
