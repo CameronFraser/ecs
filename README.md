@@ -25,13 +25,14 @@ to it and passes a list of Entity type to each System. Should be able to add Ent
 6. Research how to convert Tiled's .tmx format (http://www.mapeditor.org/) to something usable in game
 7. Create tile engine that consumes data supplied from Tiled
 8. Create player controlled player entity (create components for input from keyboard & mouse, gamepad, controllable, appearance, position and associated systems)
-9. Demonstrate character walking on tilemap
-10. Create collision detection components and systems
-11. Create entities that do not allow another entity on their same position (rocks, trees, big bush) via usage of collision detection
-12. Create day/night cycle
-13. Create weather system
-14. Create storyboarding system for outlining story progression, choices, decision trees
-15. Quest system
-16. Dialogue system
-17. Economy
-18. Basebuilding
+9. Use XML or JSON serialization/deserialization to generate components since they just hold data
+10. Demonstrate character walking on tilemap
+11. Create collision detection components and systems
+12. Create entities that do not allow another entity on their same position (rocks, trees, big bush) via usage of collision detection
+13. Create day/night cycle
+14. Create weather system
+15. Create storyboarding system for outlining story progression, choices, decision trees
+16. Quest system
+17. Dialogue system
+18. Economy
+19. Basebuilding
