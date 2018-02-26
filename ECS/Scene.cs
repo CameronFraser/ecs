@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ECS
 {
-    class Scene : IScene
+    abstract class Scene : IScene
     {
         public bool IsActive { get; set; }
         public string SceneName { get; set; }
+
+        public abstract void LoadContent(SpriteBatch spriteBatch);
+        public abstract void Update(GameTime gameTime);
+        public abstract void Draw(SpriteBatch spriteBatch);
 
         public void Print()
         {

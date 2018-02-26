@@ -50,7 +50,7 @@
     <Compile Include="SceneManager.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\LoadingScene.cs" />
-    <Compile Include="Scenes\TitleScene.cs" />
+    <Compile Include="Scenes\MainScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

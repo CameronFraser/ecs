@@ -3,11 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ECS.Scenes
 {
-    class LoadingScene : Scene
+    class MainScene : Scene
     {
-        private Color BackgroundColor = Color.BurlyWood;
+        private Color BackgroundColor = Color.Gray;
 
-        public LoadingScene(string sceneName, bool isActive)
+        public MainScene(string sceneName, bool isActive)
         {
             IsActive = isActive;
             SceneName = sceneName;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,61 +8,55 @@ namespace ECS
     class SceneManager
     {
 
-        Dictionary<string, Scene> sceneCollection = new Dictionary<string, Scene>();
+        Dictionary<string, Scene> SceneCollection = new Dictionary<string, Scene>();
         Scene activeScene;
+        GraphicsDeviceManager graphics;
+        List<Scene> SceneList = new List<Scene>();
 
-        public SceneManager(GraphicsDeviceManager graphics)
+        public SceneManager(Dictionary<string, Scene> sceneDict, GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
         {
-          
+            this.graphics = graphics;
+            SetScreenSize(screenWidth, screenHeight);
+            SceneCollection = sceneDict;
+            foreach (KeyValuePair<string, Scene> sceneEntry in sceneDict)
+            {
+                if (sceneEntry.Value.IsActive)
+                    activeScene = sceneEntry.Value;
+            }
         }
 
         public void Initialize()
         {
-
         }
 
         public void LoadContent(SpriteBatch spriteBatch)
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneCollection)
-            {
-                if (sceneEntry.Value.IsActive)
-                {
-                    sceneEntry.Value.LoadContent(spriteBatch);
-                }
-            }
+            Console.WriteLine("Active Scene is: " + activeScene);
+            if (activeScene != null)
+                activeScene.LoadContent(spriteBatch);
         }
 
         public void Update(GameTime gameTime)
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneCollection)
-            {
-                if (sceneEntry.Value.IsActive)
-                {
-                    sceneEntry.Value.Update();
-                }
-            }
+            if (activeScene != null)
+                activeScene.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneCollection)
-            {
-                if (sceneEntry.Value.IsActive)
-                {
-                    sceneEntry.Value.Draw();
-                }
-            }
+            if (activeScene != null)
+                activeScene.Draw(spriteBatch);
         }
 
         public void Add(Scene scene)
         {
-            sceneCollection.Add(scene.SceneName, scene);
+            SceneCollection.Add(scene.SceneName, scene);
         }
 
         public void SetActiveScene(string name)
         {
             Scene scene;
-            sceneCollection.TryGetValue(name, out scene);
+            SceneCollection.TryGetValue(name, out scene);
 
             SetAllScenesInactive();
 
@@ -71,7 +66,7 @@ namespace ECS
 
         private void SetAllScenesInactive()
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneCollection)
+            foreach (KeyValuePair<string, Scene> sceneEntry in SceneCollection)
             {
                 sceneEntry.Value.IsActive = false;
             }
@@ -79,10 +74,17 @@ namespace ECS
 
         public void Print()
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneCollection)
+            foreach (KeyValuePair<string, Scene> sceneEntry in SceneCollection)
             {
                 sceneEntry.Value.Print();
             }
+        }
+
+        public void SetScreenSize(int width, int height)
+        {
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
+            graphics.ApplyChanges();
         }
     }
 }
