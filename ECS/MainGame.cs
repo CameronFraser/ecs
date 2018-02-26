@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 using ECS.Scenes;
 
 namespace ECS
@@ -36,6 +37,9 @@ namespace ECS
         protected override void Initialize()
         {
             base.Initialize();
+            sceneManager.Initialize();
+            GameServices.AddService<GraphicsDevice>(GraphicsDevice);
+            GameServices.AddService<ContentManager>(Content);
         }
         
         protected override void LoadContent()
@@ -83,7 +87,9 @@ namespace ECS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.HotPink);
+            spriteBatch.Begin();
             sceneManager.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

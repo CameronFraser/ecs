@@ -42,6 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameServices.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="Program.cs" />

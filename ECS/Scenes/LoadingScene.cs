@@ -13,6 +13,10 @@ namespace ECS.Scenes
             SceneName = sceneName;
         }
 
+        public override void Initialize()
+        {
+        }
+
         public override void LoadContent(SpriteBatch spriteBatch)
         {
 

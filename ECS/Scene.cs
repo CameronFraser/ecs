@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ECS
@@ -9,7 +10,10 @@ namespace ECS
     {
         public bool IsActive { get; set; }
         public string SceneName { get; set; }
+        public ContentManager content { get; set; }
+        public GraphicsDevice graphics { get; set; }
 
+        public abstract void Initialize();
         public abstract void LoadContent(SpriteBatch spriteBatch);
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);

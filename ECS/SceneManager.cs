@@ -11,7 +11,7 @@ namespace ECS
         Dictionary<string, Scene> SceneCollection = new Dictionary<string, Scene>();
         Scene activeScene;
         GraphicsDeviceManager graphics;
-        List<Scene> SceneList = new List<Scene>();
+        SpriteBatch spriteBatch;
 
         public SceneManager(Dictionary<string, Scene> sceneDict, GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
         {
@@ -27,11 +27,13 @@ namespace ECS
 
         public void Initialize()
         {
+            if (activeScene != null)
+                activeScene.Initialize();
         }
 
         public void LoadContent(SpriteBatch spriteBatch)
         {
-            Console.WriteLine("Active Scene is: " + activeScene);
+            this.spriteBatch = spriteBatch;
             if (activeScene != null)
                 activeScene.LoadContent(spriteBatch);
         }
@@ -61,6 +63,8 @@ namespace ECS
             SetAllScenesInactive();
 
             scene.IsActive = true;
+            scene.Initialize();
+            scene.LoadContent(spriteBatch);
             activeScene = scene;
         }
 
