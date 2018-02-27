@@ -1,10 +1,9 @@
 ﻿using System;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ECS
+namespace ECS.Scenes
 {
     abstract class Scene : IScene
     {
@@ -19,11 +18,11 @@ namespace ECS
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
 
-        public void Print()
+        public void PrintDebug()
         {
             Console.WriteLine("==============");
             Console.WriteLine("Scene Name: " + SceneName);
-            Console.WriteLine("IsActive: " + IsActive.ToString());
+            Console.WriteLine("IsActive: " + IsActive);
             Console.WriteLine("==============");
         }
     }

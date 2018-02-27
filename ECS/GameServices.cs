@@ -7,14 +7,7 @@ namespace ECS
         private static GameServiceContainer container;
         public static GameServiceContainer Instance
         {
-            get
-            {
-                if (container == null)
-                {
-                    container = new GameServiceContainer();
-                }
-                return container;
-            }
+            get { return container ?? (container = new GameServiceContainer()); }
         }
 
         public static T GetService<T>()
