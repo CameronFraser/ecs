@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ECS.Scenes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,21 +8,21 @@ namespace ECS
 {
     class SceneManager
     {
-
-        Dictionary<string, Scene> SceneCollection = new Dictionary<string, Scene>();
+        readonly Dictionary<string, Scene> scenes;
         Scene activeScene;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        public SceneManager(Dictionary<string, Scene> sceneDict, GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
+        public SceneManager(Dictionary<string, Scene> scenes, GraphicsDeviceManager graphics, int screenWidth, int screenHeight)
         {
+            this.scenes = scenes;
             this.graphics = graphics;
             SetScreenSize(screenWidth, screenHeight);
-            SceneCollection = sceneDict;
-            foreach (KeyValuePair<string, Scene> sceneEntry in sceneDict)
+
+            foreach (var scene in this.scenes.Values)
             {
-                if (sceneEntry.Value.IsActive)
-                    activeScene = sceneEntry.Value;
+                if (scene.IsActive)
+                    activeScene = scene;
             }
         }
 
@@ -52,27 +53,30 @@ namespace ECS
 
         public void Add(Scene scene)
         {
-            SceneCollection.Add(scene.SceneName, scene);
+            scenes.Add(scene.SceneName, scene);
         }
 
         public void SetActiveScene(string name)
         {
             Scene scene;
-            SceneCollection.TryGetValue(name, out scene);
+            if (!scenes.TryGetValue(name, out scene))
+                throw new Exception("Attempted to set an active scene that doesn't exist in the scene list");
+
             activeScene.UnloadContent();
             activeScene.IsActive = false;
 
             scene.IsActive = true;
             scene.Initialize();
+            //This assumes you've called loadContent before and you have a spriteBatch, there may be a better way, sprite batch could be null here
             scene.LoadContent(spriteBatch);
             activeScene = scene;
         }
 
-        public void Print()
+        public void PrintDebug()
         {
-            foreach (KeyValuePair<string, Scene> sceneEntry in SceneCollection)
+            foreach (var scene in scenes.Values)
             {
-                sceneEntry.Value.Print();
+                scene.PrintDebug();
             }
         }
 

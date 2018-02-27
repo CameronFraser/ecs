@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
 using ECS.Scenes;
 
 namespace ECS
@@ -16,7 +15,7 @@ namespace ECS
         bool mReleased = true;
 
         // Temporary variables below for testing that I can switch between scenes
-        string[] scenes = new string[3] { "MainScene", "LoadingScene", "GameScene" };
+        readonly string[] scenes = { "MainScene", "LoadingScene", "GameScene" };
         int currentSceneIndex = 1;
         
         public MainGame()
@@ -24,22 +23,24 @@ namespace ECS
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            Dictionary<string, Scene> sceneCollection = new Dictionary<string, Scene>();
 
-            sceneCollection.Add("LoadingScene", new LoadingScene("LoadingScene", false));
-            sceneCollection.Add("MainScene", new MainScene("MainScene", true));
-            sceneCollection.Add("GameScene", new GameScene("GameScene", false));
+            var sceneCollection = new Dictionary<string, Scene>
+            {
+                { "LoadingScene", new LoadingScene("LoadingScene", false) },
+                { "MainScene", new MainScene("MainScene", true) },
+                { "GameScene", new GameScene("GameScene", false) }
+            };
 
             sceneManager = new SceneManager(sceneCollection, graphics, 1024, 768);
-            sceneManager.Print();
+            sceneManager.PrintDebug();
         }
         
         protected override void Initialize()
         {
             base.Initialize();
             sceneManager.Initialize();
-            GameServices.AddService<GraphicsDevice>(GraphicsDevice);
-            GameServices.AddService<ContentManager>(Content);
+            GameServices.AddService(GraphicsDevice);
+            GameServices.AddService(Content);
         }
         
         protected override void LoadContent()
@@ -61,17 +62,12 @@ namespace ECS
 
             if (mState.LeftButton == ButtonState.Pressed && mReleased)
             {
-                sceneManager.SetActiveScene(scenes[currentSceneIndex]);
-                if (currentSceneIndex == 2)
-                {
+                sceneManager.SetActiveScene(scenes[currentSceneIndex++]);
+                if (currentSceneIndex == 3)
                     currentSceneIndex = 0;
-                } else
-                {
-                    currentSceneIndex++;
-                }
                 mReleased = false;
 
-                sceneManager.Print();
+                sceneManager.PrintDebug();
             }
 
             if (mState.LeftButton == ButtonState.Released)
