@@ -46,12 +46,25 @@ namespace ECS.Systems
 
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-
+            var renderableComponents = this.renderables[entityId];
+            Vector2 position = new Vector2();
+            foreach (var component in entityComponents)
+            {
+                if (component.Name == "position")
+                {
+                    position.X = (component as Position).x;
+                    position.Y = (component as Position).y;
+                }
+            }
+            this.renderables[entityId] = new Tuple<Vector2, Texture2D>(position, renderableComponents.Item2);
         }
 
         public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
-
+            foreach (var renderable in this.renderables.Values)
+            {
+                spriteBatch.Draw(renderable.Item2, renderable.Item1, Color.White);
+            }
         }
     }
 }
