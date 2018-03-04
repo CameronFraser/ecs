@@ -21,8 +21,12 @@ namespace ECS.Scenes
             world = new World();
             var appearanceComponent = new Appearance("player");
             var positionComponent = new Position(300, 300);
+            var positionComponent1 = new Position(200, 200);
+            var positionComponent2 = new Position(400, 400);
             var renderSystem = new Render();
             world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent }));
+            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent1 }));
+            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent2 }));
             world.AddSystem(renderSystem);
         }
 
