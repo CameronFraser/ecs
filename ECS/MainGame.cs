@@ -21,7 +21,6 @@ namespace ECS
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
 
             var sceneCollection = new Dictionary<string, Scene>
             {

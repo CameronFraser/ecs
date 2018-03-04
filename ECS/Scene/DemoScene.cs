@@ -18,9 +18,12 @@ namespace ECS.Scenes
         {
             IsActive = isActive;
             SceneName = sceneName;
+
+            // Setting up player entity
+
             // Create components; generally want to do this automatically by reading in XML or JSON data and generating your game objects
-            var appearanceComponent = new Appearance("player");
-            var positionComponent = new Position(300, 300);
+            var playerAppearanceComponent = new Appearance("player");
+            var playerPositionComponent = new Position(300, 300);
             var playerControlledComponent = new PlayerControlled();
             var velocityComponent = new Velocity(3, "Up"); // How to Enum so both this class and the Velocity component know about it?
             // Create systems; same as components in that it should be read in from somewhere else and generated, aint no1 got time to type all this out
@@ -29,8 +32,17 @@ namespace ECS.Scenes
             var motionSystem = new Motion();
 
             World = new World(); // A whole new world!!!
-            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, playerControlledComponent, positionComponent, velocityComponent }));
-            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, motionSystem, renderSystem }); // Need to ensure these are executed in a specific order, should I use SortedList here?
+            World.AddEntity(new Entity(new List<IEntityComponent> { playerAppearanceComponent, playerControlledComponent, playerPositionComponent, velocityComponent })); // Player Entity added
+
+            // Setting up mouse cursor entity
+            var cursorAppearanceComponent = new Appearance("cursor");
+            var cursorPositionComponent = new Position(0, 0);
+            var mouseControlledComponent = new MouseControlled();
+            var mouseInputSystem = new MouseInput();
+
+            World.AddEntity(new Entity(new List<IEntityComponent> { cursorAppearanceComponent, cursorPositionComponent, mouseControlledComponent })); // Mouse cursor entity added
+
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, mouseInputSystem, motionSystem, renderSystem }); // Need to ensure these are executed in a specific order, should I use SortedList here?
         }
 
         public override void Initialize()

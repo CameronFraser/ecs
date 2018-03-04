@@ -60,6 +60,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Components\Appearance.cs" />
+    <Compile Include="Components\MouseControlled.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="Components\PlayerControlled.cs" />
     <Compile Include="Components\Velocity.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="ECS\World.cs" />
     <Compile Include="Systems\Motion.cs" />
     <Compile Include="Systems\KeyboardPlayerInput.cs" />
+    <Compile Include="Systems\MouseInput.cs" />
     <Compile Include="Systems\Render.cs" />
   </ItemGroup>
   <ItemGroup>

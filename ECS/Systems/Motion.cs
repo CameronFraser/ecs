@@ -33,30 +33,36 @@ namespace ECS.Systems
 
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            Velocity velocityComponent = (Velocity)entityComponents.Where(component => component.Name == "velocity").Single();
-            Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
+            try {
+                Velocity velocityComponent = (Velocity)entityComponents.Where(component => component.Name == "velocity").Single();
+                Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
 
-            if (velocityComponent.IsMoving)
+                if (velocityComponent.IsMoving)
+                {
+                    string direction = velocityComponent.Direction;
+                    // Monogame coordinate system has the (0,0) origin in the upper left hand corner
+                    if (direction == "up")
+                    {
+                        positionComponent.Y -= velocityComponent.Speed;
+                    }
+                    if (direction == "down")
+                    {
+                        positionComponent.Y += velocityComponent.Speed;
+                    }
+                    if (direction == "left")
+                    {
+                        positionComponent.X -= velocityComponent.Speed;
+                    }
+                    if (direction == "right")
+                    {
+                        positionComponent.X += velocityComponent.Speed;
+                    }
+                }
+            } catch (Exception e)
             {
-                string direction = velocityComponent.Direction;
-                // Monogame coordinate system has the (0,0) origin in the upper left hand corner
-                if (direction == "up")
-                {
-                    positionComponent.Y -= velocityComponent.Speed;
-                }
-                if (direction == "down")
-                {
-                    positionComponent.Y += velocityComponent.Speed;
-                }
-                if (direction == "left")
-                {
-                    positionComponent.X -= velocityComponent.Speed;
-                }
-                if (direction == "right")
-                {
-                    positionComponent.X += velocityComponent.Speed;
-                }
+                Console.WriteLine(e.Message);
             }
+            
 
         }
 
