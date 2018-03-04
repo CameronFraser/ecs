@@ -10,36 +10,37 @@ namespace ECS.Scenes
 {
     class DemoScene : Scene
     {
-        private Color BackgroundColor = Color.Blue;
-        private SpriteFont font;
-        private World world;
+        private Color BackgroundColor = new Color(40, 53, 147);
+        private SpriteFont Font;
+        private World World;
 
         public DemoScene(string sceneName, bool isActive)
         {
             IsActive = isActive;
             SceneName = sceneName;
-            world = new World();
             var appearanceComponent = new Appearance("player");
             var positionComponent = new Position(300, 300);
             var positionComponent1 = new Position(200, 200);
             var positionComponent2 = new Position(400, 400);
             var renderSystem = new Render();
-            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent }));
-            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent1 }));
-            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent2 }));
-            world.AddSystem(renderSystem);
+
+            World = new World(); // A whole new world!!!
+            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent }));
+            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent1 }));
+            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent2 }));
+            World.AddSystem(renderSystem);
         }
 
         public override void Initialize()
         {
-            content = GameServices.GetService<ContentManager>();
-            world.Initialize();
+            Content = GameServices.GetService<ContentManager>();
+            World.Initialize();
         }
 
         public override void LoadContent(SpriteBatch spriteBatch)
         {
-            font = content.Load<SpriteFont>("arial");
-            world.LoadContent(spriteBatch);
+            Font = Content.Load<SpriteFont>("arial");
+            World.LoadContent(spriteBatch);
         }
 
         public override void UnloadContent()
@@ -49,14 +50,14 @@ namespace ECS.Scenes
 
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
+            World.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.GraphicsDevice.Clear(BackgroundColor);
-            spriteBatch.DrawString(font, "HELLO", new Vector2(400, 400), Color.White);
-            world.Draw(spriteBatch);
+            spriteBatch.DrawString(Font, "Sandbox", new Vector2(20, 20), new Color(238, 238, 238));
+            World.Draw(spriteBatch);
         }
     }
 }

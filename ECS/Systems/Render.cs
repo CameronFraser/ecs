@@ -11,18 +11,18 @@ namespace ECS.Systems
     class Render : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
-        private Dictionary<Guid, Tuple<Vector2, Texture2D>> renderables;
-        private ContentManager content;
+        private Dictionary<Guid, Tuple<Vector2, Texture2D>> Renderables; // Dunno if tuple was the right choice, just need data holders I can make on the fly
+        private ContentManager Content;
 
         public Render()
         {
             this.ComponentNames = new List<string> { "appearance", "position" };
-            this.renderables = new Dictionary<Guid, Tuple<Vector2, Texture2D>>();
+            this.Renderables = new Dictionary<Guid, Tuple<Vector2, Texture2D>>();
         }
 
         public void Initialize(List<IEntityComponent> entityComponents, Guid entityId)
         {
-            content = GameServices.GetService<ContentManager>();
+            Content = GameServices.GetService<ContentManager>();
         }
 
         public void LoadContent(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
@@ -33,35 +33,37 @@ namespace ECS.Systems
             {
                 if (component.Name == "appearance")
                 {
-                    texture = content.Load<Texture2D>((component as Appearance).texturePath);
+                    texture = Content.Load<Texture2D>((component as Appearance).TexturePath);
                 }
-                if (component.Name == "position")
+                else if (component.Name == "position")
                 {
-                    position.X = (component as Position).x;
-                    position.Y = (component as Position).y;
+                    position.X = (component as Position).X;
+                    position.Y = (component as Position).Y;
                 }
             }
-            this.renderables.Add(entityId, new Tuple<Vector2, Texture2D>(position, texture));
+            this.Renderables.Add(entityId, new Tuple<Vector2, Texture2D>(position, texture));
         }
 
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            var renderableComponents = this.renderables[entityId];
+            var renderableComponents = this.Renderables[entityId];
             Vector2 position = new Vector2();
+
             foreach (var component in entityComponents)
             {
                 if (component.Name == "position")
                 {
-                    position.X = (component as Position).x;
-                    position.Y = (component as Position).y;
+                    position.X = (component as Position).X;
+                    position.Y = (component as Position).Y;
                 }
             }
-            this.renderables[entityId] = new Tuple<Vector2, Texture2D>(position, renderableComponents.Item2);
+
+            this.Renderables[entityId] = new Tuple<Vector2, Texture2D>(position, renderableComponents.Item2);
         }
 
         public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
-            foreach (var renderable in this.renderables.Values)
+            foreach (var renderable in this.Renderables.Values)
             {
                 spriteBatch.Draw(renderable.Item2, renderable.Item1, Color.White);
             }

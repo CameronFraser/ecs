@@ -5,12 +5,12 @@ namespace ECS.Components
     class Appearance : IEntityComponent
     {
         public string Name { get; set; }
-        public string texturePath;
+        public string TexturePath;
 
         public Appearance(string texturePath)
         {
             this.Name = "appearance";
-            this.texturePath = texturePath;
+            this.TexturePath = texturePath;
         }
     }
 }

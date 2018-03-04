@@ -8,13 +8,13 @@ namespace ECS
 {
     public class MainGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        SceneManager sceneManager;
+        GraphicsDeviceManager Graphics;
+        SpriteBatch SpriteBatch;
+        SceneManager SceneManager;
         
         public MainGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
@@ -23,22 +23,22 @@ namespace ECS
                 { "DemoScene", new DemoScene("DemoScene", true) }
             };
 
-            sceneManager = new SceneManager(sceneCollection, graphics, 1024, 768);
-            sceneManager.PrintDebug();
+            SceneManager = new SceneManager(sceneCollection, Graphics, 1024, 768);
+            SceneManager.PrintDebug();
         }
         
         protected override void Initialize()
         {
             GameServices.AddService(GraphicsDevice);
             GameServices.AddService(Content);
-            sceneManager.Initialize();
+            SceneManager.Initialize();
             base.Initialize();
         }
         
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            sceneManager.LoadContent(spriteBatch);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            SceneManager.LoadContent(SpriteBatch);
         }
         
         protected override void UnloadContent()
@@ -50,7 +50,7 @@ namespace ECS
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            sceneManager.Update(gameTime);
+            SceneManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -58,9 +58,9 @@ namespace ECS
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.HotPink);
-            spriteBatch.Begin();
-            sceneManager.Draw(spriteBatch);
-            spriteBatch.End();
+            SpriteBatch.Begin();
+            SceneManager.Draw(SpriteBatch);
+            SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

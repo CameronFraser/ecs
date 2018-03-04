@@ -8,23 +8,23 @@ namespace ECS.ECS
 {
     class World
     {
-        private Dictionary<Guid, Entity> entities;
-        private List<IEntitySystem> systems;
+        private Dictionary<Guid, Entity> Entities;
+        private List<IEntitySystem> Systems;
 
         public World()
         {
-            this.entities = new Dictionary<Guid, Entity>();
-            this.systems = new List<IEntitySystem>();
+            this.Entities = new Dictionary<Guid, Entity>();
+            this.Systems = new List<IEntitySystem>();
         }
 
         public void Initialize()
         {
             List<IEntityComponent> entityComponents, components;
 
-            foreach (var entity in this.entities.Values)
+            foreach (var entity in this.Entities.Values)
             {
                 entityComponents = entity.Components.Values.ToList();
-                foreach (var system in this.systems)
+                foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
                     system.Initialize(components, entity.Id);
@@ -36,10 +36,10 @@ namespace ECS.ECS
         {
             List<IEntityComponent> entityComponents, components;
 
-            foreach (var entity in this.entities.Values)
+            foreach (var entity in this.Entities.Values)
             {
                 entityComponents = entity.Components.Values.ToList();
-                foreach (var system in this.systems)
+                foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
                     system.LoadContent(components, entity.Id, spriteBatch);
@@ -49,19 +49,19 @@ namespace ECS.ECS
 
         public void AddSystem(IEntitySystem sys)
         {
-            this.systems.Add(sys);
+            this.Systems.Add(sys);
         }
 
         public void AddSystems(List<IEntitySystem> sys)
         {
-            this.systems.AddRange(sys);
+            this.Systems.AddRange(sys);
         }
 
         public void AddEntity(Entity entity)
         {
             Guid entityId = Guid.NewGuid();
             entity.Id = entityId;
-            this.entities.Add(entityId, entity);
+            this.Entities.Add(entityId, entity);
         }
 
         public void AddEntities(List<Entity> entities)
@@ -70,7 +70,7 @@ namespace ECS.ECS
             {
                 Guid entityId = Guid.NewGuid();
                 entity.Id = entityId;
-                this.entities.Add(entityId, entity);
+                this.Entities.Add(entityId, entity);
             }
         }
 
@@ -78,10 +78,10 @@ namespace ECS.ECS
         {
             List<IEntityComponent> entityComponents, components;
 
-            foreach (var entity in this.entities.Values)
+            foreach (var entity in this.Entities.Values)
             {
                 entityComponents = entity.Components.Values.ToList();
-                foreach (var system in this.systems)
+                foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
                     system.Update(components, entity.Id, gameTime);
@@ -93,10 +93,10 @@ namespace ECS.ECS
         {
             List<IEntityComponent> entityComponents, components;
 
-            foreach (var entity in this.entities.Values)
+            foreach (var entity in this.Entities.Values)
             {
                 entityComponents = entity.Components.Values.ToList();
-                foreach (var system in this.systems)
+                foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
                     system.Draw(components, entity.Id, spriteBatch);

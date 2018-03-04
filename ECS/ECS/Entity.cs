@@ -13,7 +13,6 @@ namespace ECS.ECS
             this.Components = new Dictionary<string, IEntityComponent>();
             foreach (var component in components)
             {
-                Console.WriteLine(component.Name);
                 this.Components.Add(component.Name, component);
             }
         }

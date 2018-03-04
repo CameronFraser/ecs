@@ -6,15 +6,15 @@ namespace ECS.Components
     {
         public string Name { get; set; }
         public enum Direction { Up, Down, Left, Right };
-        public Direction? direction;
-        public float speed;
+        public Direction? DirectionValue;
+        public float Speed;
 
         public Velocity(float speed, Direction? direction)
         {
             this.Name = "velocity";
 
-            this.speed = speed;
-            this.direction = direction;
+            this.Speed = speed;
+            this.DirectionValue = direction;
         }
     }
 }
