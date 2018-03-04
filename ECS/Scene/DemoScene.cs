@@ -22,14 +22,15 @@ namespace ECS.Scenes
             var appearanceComponent = new Appearance("player");
             var positionComponent = new Position(300, 300);
             var playerControlledComponent = new PlayerControlled();
-            var velocityComponent = new Velocity(1.0f, "Up"); // How to Enum so both this class and the Velocity component know about it?
+            var velocityComponent = new Velocity(1, "Up"); // How to Enum so both this class and the Velocity component know about it?
             // Create systems; same as components in that it should be read in from somewhere else and generated, aint no1 got time to type all this out
             var renderSystem = new Render();
             var keyboardInputSystem = new KeyboardPlayerInput();
+            var motionSystem = new Motion();
 
             World = new World(); // A whole new world!!!
-            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, playerControlledComponent, positionComponent }));
-            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, renderSystem });
+            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, playerControlledComponent, positionComponent, velocityComponent }));
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, motionSystem, renderSystem }); // Need to ensure these are executed in a specific order, should I use SortedList here?
         }
 
         public override void Initialize()
