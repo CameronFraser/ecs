@@ -11,12 +11,6 @@ namespace ECS
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SceneManager sceneManager;
-
-        bool mReleased = true;
-
-        // Temporary variables below for testing that I can switch between scenes
-        readonly string[] scenes = { "MainScene", "LoadingScene", "GameScene" };
-        int currentSceneIndex = 1;
         
         public MainGame()
         {
@@ -26,9 +20,7 @@ namespace ECS
 
             var sceneCollection = new Dictionary<string, Scene>
             {
-                { "LoadingScene", new LoadingScene("LoadingScene", false) },
-                { "MainScene", new MainScene("MainScene", true) },
-                { "GameScene", new GameScene("GameScene", false) }
+                { "GameScene", new GameScene("GameScene", true) }
             };
 
             sceneManager = new SceneManager(sceneCollection, graphics, 1024, 768);
@@ -37,10 +29,10 @@ namespace ECS
         
         protected override void Initialize()
         {
-            base.Initialize();
-            sceneManager.Initialize();
             GameServices.AddService(GraphicsDevice);
             GameServices.AddService(Content);
+            sceneManager.Initialize();
+            base.Initialize();
         }
         
         protected override void LoadContent()
@@ -57,23 +49,6 @@ namespace ECS
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            MouseState mState = Mouse.GetState();
-
-            if (mState.LeftButton == ButtonState.Pressed && mReleased)
-            {
-                sceneManager.SetActiveScene(scenes[currentSceneIndex++]);
-                if (currentSceneIndex == 3)
-                    currentSceneIndex = 0;
-                mReleased = false;
-
-                sceneManager.PrintDebug();
-            }
-
-            if (mState.LeftButton == ButtonState.Released)
-            {
-                mReleased = true;
-            }
 
             sceneManager.Update(gameTime);
 

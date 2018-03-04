@@ -76,7 +76,6 @@
     <Compile Include="ECS\World.cs" />
     <Compile Include="Systems\Motion.cs" />
     <Compile Include="Systems\PlayerInput.cs" />
-    <Compile Include="Systems\Position.cs" />
     <Compile Include="Systems\Render.cs" />
   </ItemGroup>
   <ItemGroup>
