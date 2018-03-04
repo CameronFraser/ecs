@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,32 +34,32 @@ namespace ECS.Systems
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
             KeyboardState kState = Keyboard.GetState();
-            string direction = null; // Should support multiple directions at the same time
+            List<string> directions = new List<string>(); // Should support multiple directions at the same time
             
             if (kState.IsKeyDown(Keys.Left))
             {
-                direction = "left";
+                directions.Add("left");
             }
             if (kState.IsKeyDown(Keys.Right))
             {
-                direction = "right";
+                directions.Add("right");
             }
             if (kState.IsKeyDown(Keys.Up))
             {
-                direction = "up";
+                directions.Add("up");
             }
             if (kState.IsKeyDown(Keys.Down))
             {
-                direction = "down";
+                directions.Add("down");
             }
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "velocity")
                 {
-                    if (direction != null)
+                    if (directions.Count > 0)
                     {
-                        (component as Velocity).Direction = direction;
+                        (component as Velocity).Directions = directions;
                         (component as Velocity).IsMoving = true;
                     }
                     else

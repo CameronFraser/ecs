@@ -39,21 +39,21 @@ namespace ECS.Systems
 
                 if (velocityComponent.IsMoving)
                 {
-                    string direction = velocityComponent.Direction;
+                    List<string> directions = velocityComponent.Directions;
                     // Monogame coordinate system has the (0,0) origin in the upper left hand corner
-                    if (direction == "up")
+                    if (directions.Contains("up"))
                     {
                         positionComponent.Y -= velocityComponent.Speed;
                     }
-                    if (direction == "down")
+                    if (directions.Contains("down"))
                     {
                         positionComponent.Y += velocityComponent.Speed;
                     }
-                    if (direction == "left")
+                    if (directions.Contains("left"))
                     {
                         positionComponent.X -= velocityComponent.Speed;
                     }
-                    if (direction == "right")
+                    if (directions.Contains("right"))
                     {
                         positionComponent.X += velocityComponent.Speed;
                     }
