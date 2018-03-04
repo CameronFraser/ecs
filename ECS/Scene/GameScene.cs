@@ -8,7 +8,6 @@ namespace ECS.Scenes
     class GameScene : Scene
     {
         private Color BackgroundColor = Color.Blue;
-        private ContentManager content;
         private SpriteFont font;
 
         public GameScene(string sceneName, bool isActive)
