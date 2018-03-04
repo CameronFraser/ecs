@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ECS
 {
+    /// <summary>
+    /// Manages loading of scenes, toggling of active scenes,
+    /// and the screen size
+    /// </summary>
     class SceneManager
     {
         readonly Dictionary<string, Scene> Scenes;
@@ -67,7 +71,10 @@ namespace ECS
 
             scene.IsActive = true;
             scene.Initialize();
-            //This assumes you've called loadContent before and you have a spriteBatch, there may be a better way, sprite batch could be null here
+            if (SpriteBatch == null)
+            {
+                throw new Exception("LoadContent must be called first.");
+            }
             scene.LoadContent(SpriteBatch);
             ActiveScene = scene;
         }

@@ -18,17 +18,18 @@ namespace ECS.Scenes
         {
             IsActive = isActive;
             SceneName = sceneName;
+            // Create components; generally want to do this automatically by reading in XML or JSON data and generating your game objects
             var appearanceComponent = new Appearance("player");
             var positionComponent = new Position(300, 300);
-            var positionComponent1 = new Position(200, 200);
-            var positionComponent2 = new Position(400, 400);
+            var playerControlledComponent = new PlayerControlled();
+            var velocityComponent = new Velocity(1.0f, "Up"); // How to Enum so both this class and the Velocity component know about it?
+            // Create systems; same as components in that it should be read in from somewhere else and generated, aint no1 got time to type all this out
             var renderSystem = new Render();
+            var keyboardInputSystem = new KeyboardPlayerInput();
 
             World = new World(); // A whole new world!!!
-            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent }));
-            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent1 }));
-            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent2 }));
-            World.AddSystem(renderSystem);
+            World.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, playerControlledComponent, positionComponent }));
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, renderSystem });
         }
 
         public override void Initialize()

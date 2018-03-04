@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ECS.Systems
 {
+    /// <summary>
+    /// System for defining movement
+    /// </summary>
     class Motion
     {
     }

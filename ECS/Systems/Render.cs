@@ -8,6 +8,9 @@ using ECS.ECS;
 
 namespace ECS.Systems
 {
+    /// <summary>
+    /// Renders enitities that have the appearance and position components
+    /// </summary>
     class Render : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
@@ -24,7 +27,15 @@ namespace ECS.Systems
         {
             Content = GameServices.GetService<ContentManager>();
         }
-
+        /// <summary>
+        /// Loops through a list of components and either loads a texture
+        /// or reads a positional value based on the component.
+        /// Adds the data to a dictionary with the entity guid as
+        /// a key for lookup during update
+        /// </summary>
+        /// <param name="entityComponents">List of entity components associated with the current entity</param>
+        /// <param name="entityId">The guid of the current entity</param>
+        /// <param name="spriteBatch"></param>
         public void LoadContent(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             Texture2D texture = null;
@@ -43,7 +54,13 @@ namespace ECS.Systems
             }
             this.Renderables.Add(entityId, new Tuple<Vector2, Texture2D>(position, texture));
         }
-
+        /// <summary>
+        /// Loops through components for positional component and 
+        /// saves positional data for the render cycle
+        /// </summary>
+        /// <param name="entityComponents">List of entity components associated with the current entity</param>
+        /// <param name="entityId">The guid of the current entity</param>
+        /// <param name="gameTime">Time passed since last time draw was called</param>
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
             var renderableComponents = this.Renderables[entityId];
@@ -60,7 +77,12 @@ namespace ECS.Systems
 
             this.Renderables[entityId] = new Tuple<Vector2, Texture2D>(position, renderableComponents.Item2);
         }
-
+        /// <summary>
+        /// Loops through all the renderables and renders them
+        /// </summary>
+        /// <param name="entityComponents">List of entity components associated with the current entity</param>
+        /// <param name="entityId">The guid of the current entity</param>
+        /// <param name="spriteBatch"></param>
         public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             foreach (var renderable in this.Renderables.Values)

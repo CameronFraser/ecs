@@ -6,6 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ECS.ECS
 {
+    /// <summary>
+    /// Contains a list of systems and a dictionary of Guid and Entity type
+    /// where the Guid is the entity ID. 
+    /// </summary>
     class World
     {
         private Dictionary<Guid, Entity> Entities;
@@ -16,7 +20,7 @@ namespace ECS.ECS
             this.Entities = new Dictionary<Guid, Entity>();
             this.Systems = new List<IEntitySystem>();
         }
-
+       
         public void Initialize()
         {
             List<IEntityComponent> entityComponents, components;

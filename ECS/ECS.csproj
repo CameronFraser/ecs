@@ -29,6 +29,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -59,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Components\Appearance.cs" />
     <Compile Include="Components\Position.cs" />
+    <Compile Include="Components\PlayerControlled.cs" />
     <Compile Include="Components\Velocity.cs" />
     <Compile Include="ECS\IEntityComponent.cs" />
     <Compile Include="ECS\Entity.cs" />
@@ -75,7 +78,7 @@
     <Compile Include="Scene\MainScene.cs" />
     <Compile Include="ECS\World.cs" />
     <Compile Include="Systems\Motion.cs" />
-    <Compile Include="Systems\PlayerInput.cs" />
+    <Compile Include="Systems\KeyboardPlayerInput.cs" />
     <Compile Include="Systems\Render.cs" />
   </ItemGroup>
   <ItemGroup>

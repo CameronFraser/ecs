@@ -5,16 +5,16 @@ namespace ECS.Components
     class Velocity : IEntityComponent
     {
         public string Name { get; set; }
-        public enum Direction { Up, Down, Left, Right };
-        public Direction? DirectionValue;
+        public string Direction;
         public float Speed;
+        public bool IsMoving;
 
-        public Velocity(float speed, Direction? direction)
+        public Velocity(float speed, string direction)
         {
             this.Name = "velocity";
-
+            this.IsMoving = false;
             this.Speed = speed;
-            this.DirectionValue = direction;
+            this.Direction = direction;
         }
     }
 }
