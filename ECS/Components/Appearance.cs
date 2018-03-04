@@ -2,7 +2,7 @@
 
 namespace ECS.Components
 {
-    class Appearance : IComponent
+    class Appearance : IEntityComponent
     {
         public string Name { get; set; }
         public string texturePath;
@@ -10,7 +10,6 @@ namespace ECS.Components
         public Appearance(string texturePath)
         {
             this.Name = "appearance";
-
             this.texturePath = texturePath;
         }
     }

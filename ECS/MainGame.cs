@@ -20,7 +20,7 @@ namespace ECS
 
             var sceneCollection = new Dictionary<string, Scene>
             {
-                { "GameScene", new GameScene("GameScene", true) }
+                { "DemoScene", new DemoScene("DemoScene", true) }
             };
 
             sceneManager = new SceneManager(sceneCollection, graphics, 1024, 768);

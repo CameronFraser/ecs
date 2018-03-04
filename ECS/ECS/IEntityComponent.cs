@@ -1,7 +1,7 @@
 ﻿
 namespace ECS.ECS
 {
-    interface IComponent
+    interface IEntityComponent
     {
         string Name { get; set; }
     }

@@ -9,17 +9,17 @@ namespace ECS.ECS
     class World
     {
         private Dictionary<Guid, Entity> entities;
-        private List<System> systems;
+        private List<IEntitySystem> systems;
 
         public World()
         {
             this.entities = new Dictionary<Guid, Entity>();
-            this.systems = new List<System>();
+            this.systems = new List<IEntitySystem>();
         }
 
         public void Initialize()
         {
-            List<IComponent> entityComponents, components;
+            List<IEntityComponent> entityComponents, components;
 
             foreach (var entity in this.entities.Values)
             {
@@ -27,14 +27,14 @@ namespace ECS.ECS
                 foreach (var system in this.systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Initialize(components);
+                    system.Initialize(components, entity.Id);
                 }
             }
         }
 
         public void LoadContent(SpriteBatch spriteBatch)
         {
-            List<IComponent> entityComponents, components;
+            List<IEntityComponent> entityComponents, components;
 
             foreach (var entity in this.entities.Values)
             {
@@ -42,17 +42,17 @@ namespace ECS.ECS
                 foreach (var system in this.systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.LoadContent(components, spriteBatch);
+                    system.LoadContent(components, entity.Id, spriteBatch);
                 }
             }
         }
 
-        public void AddSystem(System sys)
+        public void AddSystem(IEntitySystem sys)
         {
             this.systems.Add(sys);
         }
 
-        public void AddSystems(List<System> sys)
+        public void AddSystems(List<IEntitySystem> sys)
         {
             this.systems.AddRange(sys);
         }
@@ -76,7 +76,7 @@ namespace ECS.ECS
 
         public void Update(GameTime gameTime)
         {
-            List<IComponent> entityComponents, components;
+            List<IEntityComponent> entityComponents, components;
 
             foreach (var entity in this.entities.Values)
             {
@@ -84,14 +84,14 @@ namespace ECS.ECS
                 foreach (var system in this.systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Update(components, gameTime);
+                    system.Update(components, entity.Id, gameTime);
                 }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            List<IComponent> entityComponents, components;
+            List<IEntityComponent> entityComponents, components;
 
             foreach (var entity in this.entities.Values)
             {
@@ -99,7 +99,7 @@ namespace ECS.ECS
                 foreach (var system in this.systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Draw(components, spriteBatch);
+                    system.Draw(components, entity.Id, spriteBatch);
                 }
             }
         }

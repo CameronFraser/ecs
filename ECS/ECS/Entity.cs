@@ -6,17 +6,19 @@ namespace ECS.ECS
     class Entity
     {
         public Guid Id { get; set; }
-        public Dictionary<string, IComponent> Components { get; }
+        public Dictionary<string, IEntityComponent> Components { get; set; }
 
-        public Entity(List<IComponent> components)
+        public Entity(List<IEntityComponent> components)
         {
+            this.Components = new Dictionary<string, IEntityComponent>();
             foreach (var component in components)
             {
+                Console.WriteLine(component.Name);
                 this.Components.Add(component.Name, component);
             }
         }
 
-        public void AddComponent(IComponent component)
+        public void AddComponent(IEntityComponent component)
         {
             this.Components.Add(component.Name, component);
         }

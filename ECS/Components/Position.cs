@@ -2,7 +2,7 @@
 
 namespace ECS.Components
 {
-    class Position : IComponent
+    class Position : IEntityComponent
     {
         public string Name { get; set; }
         public int x;
@@ -10,6 +10,7 @@ namespace ECS.Components
 
         public Position(int x, int y)
         {
+            this.Name = "position";
             this.x = x;
             this.y = y;
         }

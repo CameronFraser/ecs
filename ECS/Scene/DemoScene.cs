@@ -1,30 +1,41 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using ECS.ECS;
+using ECS.Components;
+using ECS.Systems;
 
 namespace ECS.Scenes
 {
-    class GameScene : Scene
+    class DemoScene : Scene
     {
         private Color BackgroundColor = Color.Blue;
         private SpriteFont font;
+        private World world;
 
-        public GameScene(string sceneName, bool isActive)
+        public DemoScene(string sceneName, bool isActive)
         {
             IsActive = isActive;
             SceneName = sceneName;
+            world = new World();
+            var appearanceComponent = new Appearance("player");
+            var positionComponent = new Position(300, 300);
+            var renderSystem = new Render();
+            world.AddEntity(new Entity(new List<IEntityComponent> { appearanceComponent, positionComponent }));
+            world.AddSystem(renderSystem);
         }
 
         public override void Initialize()
         {
             content = GameServices.GetService<ContentManager>();
+            world.Initialize();
         }
 
         public override void LoadContent(SpriteBatch spriteBatch)
         {
-            Console.WriteLine("Load Content");
             font = content.Load<SpriteFont>("arial");
+            world.LoadContent(spriteBatch);
         }
 
         public override void UnloadContent()
@@ -34,13 +45,14 @@ namespace ECS.Scenes
 
         public override void Update(GameTime gameTime)
         {
-
+            world.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.GraphicsDevice.Clear(BackgroundColor);
             spriteBatch.DrawString(font, "HELLO", new Vector2(400, 400), Color.White);
+            world.Draw(spriteBatch);
         }
     }
 }

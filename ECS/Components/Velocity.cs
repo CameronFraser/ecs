@@ -2,7 +2,7 @@
 
 namespace ECS.Components
 {
-    class Velocity : IComponent
+    class Velocity : IEntityComponent
     {
         public string Name { get; set; }
         public enum Direction { Up, Down, Left, Right };
