@@ -141,7 +141,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="app.manifest" />
-    <None Include="Content\sf-pixelate.spritefont" />
+    <None Include="Content\sf-pixelate.spritefont">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\SFPixelate.ttf" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

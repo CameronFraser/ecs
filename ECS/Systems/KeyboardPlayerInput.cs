@@ -34,37 +34,38 @@ namespace ECS.Systems
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
             KeyboardState kState = Keyboard.GetState();
-            List<string> directions = new List<string>(); // Should support multiple directions at the same time
+            var x = 0;
+            var y = 0;
             
             if (kState.IsKeyDown(Keys.Left))
             {
-                directions.Add("left");
+                x = -1;
             }
             if (kState.IsKeyDown(Keys.Right))
             {
-                directions.Add("right");
+                x = 1;
             }
             if (kState.IsKeyDown(Keys.Up))
             {
-                directions.Add("up");
+                y = -1;
             }
             if (kState.IsKeyDown(Keys.Down))
             {
-                directions.Add("down");
+                y = 1;
             }
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "velocity")
                 {
-                    if (directions.Count > 0)
+                    if (x == 0 && y == 0)
                     {
-                        (component as Velocity).Directions = directions;
-                        (component as Velocity).IsMoving = true;
+                        (component as Velocity).IsMoving = false;
                     }
                     else
                     {
-                        (component as Velocity).IsMoving = false;
+                        (component as Velocity).Directions = new Vector2(x, y);
+                        (component as Velocity).IsMoving = true;
                     }
                     
                 }

@@ -25,7 +25,7 @@ namespace ECS.Scenes
             var playerAppearanceComponent = new Appearance("player");
             var playerPositionComponent = new Position(300, 300);
             var playerControlledComponent = new PlayerControlled();
-            var velocityComponent = new Velocity(3, new List<string> { "Up" }); // How to Enum so both this class and the Velocity component know about it?
+            var velocityComponent = new Velocity(3, new Vector2(0, -1)); // How to Enum so both this class and the Velocity component know about it?
             // Create systems; same as components in that it should be read in from somewhere else and generated, aint no1 got time to type all this out
             var renderSystem = new Render();
             var keyboardInputSystem = new KeyboardPlayerInput();
