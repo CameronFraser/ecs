@@ -53,7 +53,7 @@ namespace ECS.Scenes
 
         public override void LoadContent(SpriteBatch spriteBatch)
         {
-            Font = Content.Load<SpriteFont>("arial");
+            Font = Content.Load<SpriteFont>("sf-pixelate");
             World.LoadContent(spriteBatch);
         }
 
