@@ -6,86 +6,79 @@ using ECS.Scenes;
 
 namespace ECS
 {
+    /// <summary>
+    /// The main game loop. Responsible for creating scenes,
+    /// registering scenes with the scene manager, registering game services
+    /// with the game services singleton
+    /// </summary>
     public class MainGame : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        SceneManager sceneManager;
-
-        bool mReleased = true;
-
-        // Temporary variables below for testing that I can switch between scenes
-        readonly string[] scenes = { "MainScene", "LoadingScene", "GameScene" };
-        int currentSceneIndex = 1;
+        GraphicsDeviceManager Graphics;
+        SpriteBatch SpriteBatch;
+        SceneManager SceneManager;
         
         public MainGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
 
             var sceneCollection = new Dictionary<string, Scene>
             {
-                { "LoadingScene", new LoadingScene("LoadingScene", false) },
-                { "MainScene", new MainScene("MainScene", true) },
-                { "GameScene", new GameScene("GameScene", false) }
+                { "DemoScene", new DemoScene("DemoScene", true) }
             };
 
-            sceneManager = new SceneManager(sceneCollection, graphics, 1024, 768);
-            sceneManager.PrintDebug();
+            SceneManager = new SceneManager(sceneCollection, Graphics, 1024, 768);
+            SceneManager.PrintDebug();
         }
-        
+        /// <summary>
+        /// Called once after constructor is called
+        /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();
-            sceneManager.Initialize();
             GameServices.AddService(GraphicsDevice);
             GameServices.AddService(Content);
+            SceneManager.Initialize();
+            base.Initialize();
         }
-        
+        /// <summary>
+        /// Called once after initialize
+        /// </summary>
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            sceneManager.LoadContent(spriteBatch);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            SceneManager.LoadContent(SpriteBatch);
         }
         
+        /// <summary>
+        /// Called once when game terminated
+        /// </summary>
         protected override void UnloadContent()
         {
         }
         
+        /// <summary>
+        /// Called every tick and should contain logic that updates the state of components and/or game state
+        /// </summary>
+        /// <param name="gameTime">Time passed since last time update was called</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            MouseState mState = Mouse.GetState();
-
-            if (mState.LeftButton == ButtonState.Pressed && mReleased)
-            {
-                sceneManager.SetActiveScene(scenes[currentSceneIndex++]);
-                if (currentSceneIndex == 3)
-                    currentSceneIndex = 0;
-                mReleased = false;
-
-                sceneManager.PrintDebug();
-            }
-
-            if (mState.LeftButton == ButtonState.Released)
-            {
-                mReleased = true;
-            }
-
-            sceneManager.Update(gameTime);
+            SceneManager.Update(gameTime);
 
             base.Update(gameTime);
         }
-        
+        /// <summary>
+        /// Called every tick after update and contains rendering logic
+        /// </summary>
+        /// <param name="gameTime">Time passed since last time draw was called</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.HotPink);
-            spriteBatch.Begin();
-            sceneManager.Draw(spriteBatch);
-            spriteBatch.End();
+            SpriteBatch.Begin();
+            SceneManager.Draw(SpriteBatch);
+            SpriteBatch.End();
             base.Draw(gameTime);
         }
     }

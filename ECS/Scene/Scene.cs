@@ -9,8 +9,8 @@ namespace ECS.Scenes
     {
         public bool IsActive { get; set; }
         public string SceneName { get; set; }
-        public ContentManager content { get; set; }
-        public GraphicsDevice graphics { get; set; }
+        public ContentManager Content { get; set; }
+        public GraphicsDevice Graphics { get; set; }
 
         public abstract void Initialize();
         public abstract void LoadContent(SpriteBatch spriteBatch);
