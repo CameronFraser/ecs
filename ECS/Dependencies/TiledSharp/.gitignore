@@ -1,0 +1,10 @@
+# Monodevelop configuration
+*.userprefs
+*.pidb
+bin
+obj
+test-results
+*.nupkg
+*.user
+*.suo
+

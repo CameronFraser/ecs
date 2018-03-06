@@ -63,6 +63,9 @@
     <Compile Include="Components\MouseControlled.cs" />
     <Compile Include="Components\Position.cs" />
     <Compile Include="Components\PlayerControlled.cs" />
+    <Compile Include="Components\Tile.cs" />
+    <Compile Include="Components\TileEngine.cs" />
+    <Compile Include="Components\TileMap.cs" />
     <Compile Include="Components\Velocity.cs" />
     <Compile Include="ECS\IEntityComponent.cs" />
     <Compile Include="ECS\Entity.cs" />
@@ -78,10 +81,13 @@
     <Compile Include="Scene\LoadingScene.cs" />
     <Compile Include="Scene\MainScene.cs" />
     <Compile Include="ECS\World.cs" />
+    <Compile Include="Services\ConsoleLogger.cs" />
+    <Compile Include="Services\ILogger.cs" />
     <Compile Include="Systems\Motion.cs" />
     <Compile Include="Systems\KeyboardPlayerInput.cs" />
     <Compile Include="Systems\MouseInput.cs" />
     <Compile Include="Systems\Render.cs" />
+    <Compile Include="Systems\TileRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -89,6 +95,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="TiledSharp">
+      <HintPath>Dependencies\TiledSharp\TiledSharp\bin\Debug\TiledSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -145,6 +155,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Content\SFPixelate.ttf" />
+    <None Include="TiledData\test.tmx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -155,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\cursor.png" />
+    <Content Include="Content\PathAndObjects.png" />
     <Content Include="Content\player.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

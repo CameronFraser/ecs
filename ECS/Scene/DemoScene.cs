@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TiledSharp;
 using ECS.ECS;
 using ECS.Components;
 using ECS.Systems;
+using ECS.Services;
 
 namespace ECS.Scenes
 {
@@ -13,6 +17,8 @@ namespace ECS.Scenes
         private Color BackgroundColor = new Color(40, 53, 147);
         private SpriteFont Font;
         private World World;
+        TmxMap Map;
+        ILogger Logger;
 
         public DemoScene(string sceneName, bool isActive)
         {
@@ -48,6 +54,7 @@ namespace ECS.Scenes
         public override void Initialize()
         {
             Content = GameServices.GetService<ContentManager>();
+            Logger = GameServices.GetService<ILogger>();
             World.Initialize();
         }
 
@@ -55,6 +62,23 @@ namespace ECS.Scenes
         {
             Font = Content.Load<SpriteFont>("sf-pixelate");
             World.LoadContent(spriteBatch);
+            Map = new TmxMap("../../../../TiledData/test.tmx");
+
+            Logger.Log("===================Layers============");
+            foreach (var layer in Map.Layers)
+            {
+                Logger.Log("Layer Name: " + layer.Name);
+                Logger.Log("Layer Offsets: " + layer.OffsetX.ToString() + " " + layer.OffsetY.ToString());
+                Logger.Log("Layer Opacity: " + layer.Opacity.ToString());
+                Logger.Log("Layer Visibility: " + layer.Visible.ToString());
+            }
+            Logger.Log("=================== TileSets ============ ");
+            foreach (var tileset in Map.Tilesets)
+            {
+                Logger.Log(tileset.Name.ToString());
+                Logger.Log("Tile Width: " + tileset.TileWidth);
+                Logger.Log("Tile Height: " + tileset.TileHeight);
+            }
         }
 
         public override void UnloadContent()

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ECS.Scenes;
+using ECS.Services;
 
 namespace ECS
 {
@@ -16,6 +17,7 @@ namespace ECS
         GraphicsDeviceManager Graphics;
         SpriteBatch SpriteBatch;
         SceneManager SceneManager;
+        ILogger Logger;
         
         public MainGame()
         {
@@ -29,6 +31,7 @@ namespace ECS
 
             SceneManager = new SceneManager(sceneCollection, Graphics, 1024, 768);
             SceneManager.PrintDebug();
+            Logger = new ConsoleLogger();
         }
         /// <summary>
         /// Called once after constructor is called
@@ -37,6 +40,7 @@ namespace ECS
         {
             GameServices.AddService(GraphicsDevice);
             GameServices.AddService(Content);
+            GameServices.AddService(Logger);
             SceneManager.Initialize();
             base.Initialize();
         }
