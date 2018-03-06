@@ -2,9 +2,9 @@
 
 namespace ECS.Components
 {
-    class Position : IEntityComponent
+    class Position : EntityComponent
     {
-        public string Name { get; set; }
+        public override string Name { get; set; }
         public int X;
         public int Y;
 

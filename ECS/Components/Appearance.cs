@@ -2,9 +2,9 @@
 
 namespace ECS.Components
 {
-    class Appearance : IEntityComponent
+    class Appearance : EntityComponent
     {
-        public string Name { get; set; }
+        public override string Name { get; set; }
         public string TexturePath;
 
         public Appearance(string texturePath)

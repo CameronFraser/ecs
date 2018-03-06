@@ -18,17 +18,17 @@ namespace ECS.Systems
             this.ComponentNames = new List<string> { "mouse_controlled", "position" };
         }
 
-        public void Initialize(List<IEntityComponent> entityComponents, Guid entityId)
+        public void Initialize(List<EntityComponent> entityComponents, Guid entityId)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void LoadContent(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void LoadContent(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
+        public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace ECS.Systems
             }
         }
 
-        public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }

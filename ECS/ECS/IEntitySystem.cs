@@ -8,9 +8,9 @@ namespace ECS.ECS
     interface IEntitySystem
     {
         List<string> ComponentNames { get;  }
-        void Initialize(List<IEntityComponent> components, Guid entityId);
-        void LoadContent(List<IEntityComponent> components, Guid entityId, SpriteBatch spriteBatch);
-        void Update(List<IEntityComponent> components, Guid entityId, GameTime gameTime);
-        void Draw(List<IEntityComponent> components, Guid entityId, SpriteBatch spriteBatch);
+        void Initialize(List<EntityComponent> components, Guid entityId);
+        void LoadContent(List<EntityComponent> components, Guid entityId, SpriteBatch spriteBatch);
+        void Update(List<EntityComponent> components, Guid entityId, GameTime gameTime);
+        void Draw(List<EntityComponent> components, Guid entityId, SpriteBatch spriteBatch);
     }
 }

@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using ECS.ECS;
 
 namespace ECS.Components
 {
-    class TileMap
+    class TileMap : EntityComponent
     {
+        public override string Name { get; set; }
+        public List<string> TileLayerNames;
+
+        public TileMap(List<string> tileLayerNames)
+        {
+            this.Name = "tilemap";
+            this.TileLayerNames = tileLayerNames;
+        }
     }
 }

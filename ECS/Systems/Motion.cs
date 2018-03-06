@@ -21,38 +21,48 @@ namespace ECS.Systems
             this.ComponentNames = new List<string> { "velocity", "position" };
         }
 
-        public void Initialize(List<IEntityComponent> entityComponents, Guid entityId)
+        public void Initialize(List<EntityComponent> entityComponents, Guid entityId)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void LoadContent(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void LoadContent(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
+        public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            try {
-                Velocity velocityComponent = (Velocity)entityComponents.Where(component => component.Name == "velocity").Single();
-                Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
+            Velocity VelocityComponent = null;
+            Position PositionComponent = null;
 
-                if (velocityComponent.IsMoving)
-                {
-                    Vector2 directions = velocityComponent.Directions;
-                    // Monogame coordinate system has the (0,0) origin in the upper left hand corner
-                    positionComponent.Y += (int)directions.Y * velocityComponent.Speed;
-                    positionComponent.X += (int)directions.X * velocityComponent.Speed;
-                }
-            } catch (Exception e)
+            foreach (var component in entityComponents)
             {
-                Console.WriteLine(e.Message);
+                if (component.Name == "velocity")
+                {
+                    VelocityComponent = (Velocity)component;
+                }
+                if (component.Name == "position")
+                {
+                    PositionComponent = (Position)component;
+                }
+            }
+            if (VelocityComponent != null && PositionComponent != null)
+            {
+                if (VelocityComponent.IsMoving)
+                {
+                    Vector2 directions = VelocityComponent.Directions;
+                    // Monogame coordinate system has the (0,0) origin in the upper left hand corner
+                    PositionComponent.Y += (int)directions.Y * VelocityComponent.Speed;
+                    PositionComponent.X += (int)directions.X * VelocityComponent.Speed;
+                }
             }
             
 
+
         }
 
-        public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }

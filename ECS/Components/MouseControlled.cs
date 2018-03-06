@@ -6,9 +6,9 @@ namespace ECS.Components
     /// Determines if entity is controlled by keyboard or gamepad input
     /// The existence of it implies that this is true
     /// </summary>
-    class MouseControlled: IEntityComponent
+    class MouseControlled: EntityComponent
     {
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         public MouseControlled()
         {

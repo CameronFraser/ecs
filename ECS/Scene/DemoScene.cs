@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System;
-using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +24,33 @@ namespace ECS.Scenes
             IsActive = isActive;
             SceneName = sceneName;
 
+            World = new World(); // A whole new world!!!
+
+            // Setting up Tile Engine Entity
+            
+            Map = new TmxMap("../../../../TiledData/test.tmx"); // Loading TMX data
+            
+            var tileLayerNames = new List<string>();
+            var tileRenderSystem = new TileRender();
+            
+
+            foreach (var tileset in Map.Tilesets)
+            {
+                Console.WriteLine(tileset.Name);
+                World.AddEntity(new Entity(new List<EntityComponent> { new TileSet(tileset) }));
+                Console.WriteLine("Creating tileset entity");
+            }
+            
+            foreach (var layer in Map.Layers)
+            {
+                World.AddEntity(new Entity(new List<EntityComponent> { new TileLayer(layer) }));
+                tileLayerNames.Add(layer.Name);
+            }
+
+            World.AddEntity(new Entity(new List<EntityComponent> { new TileMap(tileLayerNames) }));
+
+            Console.WriteLine("Creating tilemap entity");
+            
             // Setting up player entity
 
             // Create components; generally want to do this automatically by reading in XML or JSON data and generating your game objects
@@ -37,8 +63,7 @@ namespace ECS.Scenes
             var keyboardInputSystem = new KeyboardPlayerInput();
             var motionSystem = new Motion();
 
-            World = new World(); // A whole new world!!!
-            World.AddEntity(new Entity(new List<IEntityComponent> { playerAppearanceComponent, playerControlledComponent, playerPositionComponent, velocityComponent })); // Player Entity added
+            World.AddEntity(new Entity(new List<EntityComponent> { playerAppearanceComponent, playerControlledComponent, playerPositionComponent, velocityComponent })); // Player Entity added
 
             // Setting up mouse cursor entity
             var cursorAppearanceComponent = new Appearance("cursor");
@@ -46,9 +71,10 @@ namespace ECS.Scenes
             var mouseControlledComponent = new MouseControlled();
             var mouseInputSystem = new MouseInput();
 
-            World.AddEntity(new Entity(new List<IEntityComponent> { cursorAppearanceComponent, cursorPositionComponent, mouseControlledComponent })); // Mouse cursor entity added
+            World.AddEntity(new Entity(new List<EntityComponent> { cursorAppearanceComponent, cursorPositionComponent, mouseControlledComponent })); // Mouse cursor entity added
 
-            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, mouseInputSystem, motionSystem, renderSystem }); // Need to ensure these are executed in a specific order, should I use SortedList here?
+            // Add the systems! Order MATTERS! YOU WOULDN'T DRAW A NOSE BEHIND A FACE WOULD YOU?
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, mouseInputSystem, motionSystem, renderSystem });
         }
 
         public override void Initialize()
@@ -62,23 +88,6 @@ namespace ECS.Scenes
         {
             Font = Content.Load<SpriteFont>("sf-pixelate");
             World.LoadContent(spriteBatch);
-            Map = new TmxMap("../../../../TiledData/test.tmx");
-
-            Logger.Log("===================Layers============");
-            foreach (var layer in Map.Layers)
-            {
-                Logger.Log("Layer Name: " + layer.Name);
-                Logger.Log("Layer Offsets: " + layer.OffsetX.ToString() + " " + layer.OffsetY.ToString());
-                Logger.Log("Layer Opacity: " + layer.Opacity.ToString());
-                Logger.Log("Layer Visibility: " + layer.Visible.ToString());
-            }
-            Logger.Log("=================== TileSets ============ ");
-            foreach (var tileset in Map.Tilesets)
-            {
-                Logger.Log(tileset.Name.ToString());
-                Logger.Log("Tile Width: " + tileset.TileWidth);
-                Logger.Log("Tile Height: " + tileset.TileHeight);
-            }
         }
 
         public override void UnloadContent()

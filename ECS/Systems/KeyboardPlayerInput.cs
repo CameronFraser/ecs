@@ -21,58 +21,69 @@ namespace ECS.Systems
             this.ComponentNames = new List<string> { "player_controlled", "velocity" };
         }
 
-        public void Initialize(List<IEntityComponent> entityComponents, Guid entityId)
+        public void Initialize(List<EntityComponent> entityComponents, Guid entityId)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void LoadContent(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void LoadContent(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }
 
-        public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
+        public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            KeyboardState kState = Keyboard.GetState();
-            var x = 0;
-            var y = 0;
-            
-            if (kState.IsKeyDown(Keys.Left))
-            {
-                x = -1;
-            }
-            if (kState.IsKeyDown(Keys.Right))
-            {
-                x = 1;
-            }
-            if (kState.IsKeyDown(Keys.Up))
-            {
-                y = -1;
-            }
-            if (kState.IsKeyDown(Keys.Down))
-            {
-                y = 1;
-            }
+            Velocity VelocityComponent = null;
+            PlayerControlled PlayerControlledComponent = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "velocity")
                 {
-                    if (x == 0 && y == 0)
-                    {
-                        (component as Velocity).IsMoving = false;
-                    }
-                    else
-                    {
-                        (component as Velocity).Directions = new Vector2(x, y);
-                        (component as Velocity).IsMoving = true;
-                    }
-                    
+                    VelocityComponent = (Velocity)component;
+                }
+                if (component.Name == "player_controlled")
+                {
+                    PlayerControlledComponent = (PlayerControlled)(component);
+                }
+            }
+
+            if (VelocityComponent != null && PlayerControlledComponent != null)
+            {
+                KeyboardState kState = Keyboard.GetState();
+                var x = 0;
+                var y = 0;
+
+                if (kState.IsKeyDown(Keys.Left))
+                {
+                    x = -1;
+                }
+                if (kState.IsKeyDown(Keys.Right))
+                {
+                    x = 1;
+                }
+                if (kState.IsKeyDown(Keys.Up))
+                {
+                    y = -1;
+                }
+                if (kState.IsKeyDown(Keys.Down))
+                {
+                    y = 1;
+                }
+
+                if (x == 0 && y == 0)
+                {
+                    VelocityComponent.IsMoving = false;
+                }
+                else
+                {
+                    VelocityComponent.Directions = new Vector2(x, y);
+                    VelocityComponent.IsMoving = true;
                 }
             }
         }
 
-        public void Draw(List<IEntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
+        public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
             // Dont need some of these methods, maybe they should be in a class I inherit from and override?
         }

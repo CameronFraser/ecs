@@ -4,9 +4,9 @@ using ECS.ECS;
 
 namespace ECS.Components
 {
-    class Velocity : IEntityComponent
+    class Velocity : EntityComponent
     {
-        public string Name { get; set; }
+        public override string Name { get; set; }
         public Vector2 Directions;
         public int Speed;
         public bool IsMoving;
