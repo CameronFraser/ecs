@@ -33,11 +33,13 @@ namespace ECS.Systems
             try
             {
                 MouseState mState = Mouse.GetState();
-                MouseControlled mouseControlled = (MouseControlled)entityComponents.Where(component => component.Name == "mouse_controlled").Single();
-                Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
-
-                positionComponent.X = mState.Position.X;
-                positionComponent.Y = mState.Position.Y;
+                MouseControlled mouseControlled = entityComponents.SingleOrDefault(component => component.Name == "mouse_controlled") as MouseControlled;
+                Position positionComponent = entityComponents.SingleOrDefault(component => component.Name == "position") as Position;
+                if (positionComponent != null && mouseControlled != null)
+                {
+                    positionComponent.X = mState.Position.X;
+                    positionComponent.Y = mState.Position.Y;
+                }
             }
             catch (Exception e)
             {
