@@ -46,8 +46,7 @@ namespace ECS.Scenes
                 World.AddEntity(new Entity(new List<EntityComponent> { new TileLayer(layer) }));
                 tileLayerNames.Add(layer.Name);
             }
-
-            World.AddEntity(new Entity(new List<EntityComponent> { new TileMap(tileLayerNames) }));
+            
 
             Console.WriteLine("Creating tilemap entity");
             
@@ -74,7 +73,7 @@ namespace ECS.Scenes
             World.AddEntity(new Entity(new List<EntityComponent> { cursorAppearanceComponent, cursorPositionComponent, mouseControlledComponent })); // Mouse cursor entity added
 
             // Add the systems! Order MATTERS! YOU WOULDN'T DRAW A NOSE BEHIND A FACE WOULD YOU?
-            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, mouseInputSystem, motionSystem, renderSystem });
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, mouseInputSystem, motionSystem, tileRenderSystem, renderSystem });
         }
 
         public override void Initialize()

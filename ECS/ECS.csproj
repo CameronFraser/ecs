@@ -64,7 +64,6 @@
     <Compile Include="Components\Position.cs" />
     <Compile Include="Components\PlayerControlled.cs" />
     <Compile Include="Components\TileLayer.cs" />
-    <Compile Include="Components\TileMap.cs" />
     <Compile Include="Components\TileSet.cs" />
     <Compile Include="Components\Velocity.cs" />
     <Compile Include="ECS\EntityComponent.cs" />
