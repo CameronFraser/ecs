@@ -30,19 +30,26 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            try
+
+            MouseControlled MouseControlledComponent = null;
+            Position PositionComponent = null;
+
+            foreach (var component in entityComponents)
+            {
+                if (component.Name == "mouse_controlled")
+                {
+                    MouseControlledComponent = (MouseControlled)component;
+                }
+                if (component.Name == "position")
+                {
+                    PositionComponent = (Position)(component);
+                }
+            }
+            if (MouseControlledComponent != null && PositionComponent != null)
             {
                 MouseState mState = Mouse.GetState();
-                MouseControlled mouseControlled = (MouseControlled)entityComponents.Where(component => component.Name == "mouse_controlled").Single();
-                Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
-
-                positionComponent.X = mState.Position.X;
-                positionComponent.Y = mState.Position.Y;
-            }
-            catch (Exception e)
-            {
-
-                Console.WriteLine(e.Message);
+                PositionComponent.X = mState.Position.X;
+                PositionComponent.Y = mState.Position.Y;
             }
         }
 

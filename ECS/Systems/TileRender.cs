@@ -116,7 +116,18 @@ namespace ECS.Systems
                             int zoom = 1;
 
                             Rectangle tilesetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
-                            spriteBatch.Draw(tileSet.texture, new Vector2(x * tileSet.tileWidth, y * tileSet.tileHeight), tilesetRec, Color.White, 0.0f, new Vector2(0, 0), new Vector2(zoom, zoom), SpriteEffects.None, 0);
+
+                            spriteBatch.Draw(
+                                tileSet.texture,
+                                new Vector2(x * tileSet.tileWidth, y * tileSet.tileHeight),
+                                tilesetRec,
+                                Color.White,
+                                0.0f,
+                                new Vector2(0, 0),
+                                new Vector2(zoom, zoom),
+                                SpriteEffects.None, 
+                                0
+                            );
                         }
                     }
                 }
