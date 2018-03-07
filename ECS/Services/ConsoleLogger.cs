@@ -14,7 +14,7 @@ namespace ECS.Services
 
         public void Log(string logEntry)
         {
-            var logEntryWithTime = $"{DateTime.Now}: {logEntry}";
+            var logEntryWithTime = $"{DateTime.Now.ToString()}: {logEntry.ToString()}";
             LogBuffer.Add(logEntryWithTime);
             Console.WriteLine(logEntryWithTime);
         }

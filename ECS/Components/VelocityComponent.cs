@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using ECS.ECS;
 
 namespace ECS.Components
 {
     class VelocityComponent : EntityComponent
     {
+        public override string Name { get; set; }
         public Vector2 Directions;
         public int Speed;
         public bool IsMoving;

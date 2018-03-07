@@ -3,31 +3,32 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using ECS.Components;
+using ECS.Services;
 using System;
-using System.Linq;
+using ECS.ECS;
 
 namespace ECS.Systems
 {
     class TileRenderSystem : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
-        public Dictionary<string, TileLayer> TileLayers { get; set; }
-        public Dictionary<int, TileSet> TileSets { get; set; }
+        public Dictionary<string, TileLayerStruct> TileLayers { get; set; }
+        public Dictionary<int, TileSetStruct> TileSets { get; set; }
         public Vector2 CameraPosition { get; set; }
         public string LastLog = "";
 
         private ContentManager Content;
         private GraphicsDeviceManager Graphics;
 
-        public class TileLayer
+        public struct TileLayerStruct
         {
             public double opacity;
             public bool visible;
             public int width;
             public int height;
-            public List<Tile> tiles;
+            public List<Tuple<int, int, int>> tiles;
 
-            public TileLayer(double opacity, bool visible, int width, int height, List<Tile> tiles)
+            public TileLayerStruct(double opacity, bool visible, int width, int height, List<Tuple<int, int, int>> tiles)
             {
                 this.opacity = opacity;
                 this.visible = visible;
@@ -37,25 +38,26 @@ namespace ECS.Systems
             }
         }
 
-        public class TileSet
+        public struct TileSetStruct
         {
             public Texture2D texture;
             public int tileHeight;
             public int tileWidth;
 
-            public TileSet(Texture2D texture, int tileHeight, int tileWidth)
+            public TileSetStruct(Texture2D texture, int tileHeight, int tileWidth)
             {
                 this.texture = texture;
                 this.tileHeight = tileHeight;
                 this.tileWidth = tileWidth;
             }
+
         }
 
         public TileRenderSystem()
         {
             this.ComponentNames = new List<string> { "tilelayer", "tileset", "camera", "position" };
-            this.TileLayers = new Dictionary<string, TileLayer>();
-            this.TileSets = new Dictionary<int, TileSet>();
+            this.TileLayers = new Dictionary<string, TileLayerStruct>();
+            this.TileSets = new Dictionary<int, TileSetStruct>();
             this.CameraPosition = new Vector2(0, 0);
             this.LastLog = "";
         }
@@ -68,78 +70,101 @@ namespace ECS.Systems
 
         public void LoadContent(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
-            var tlc = entityComponents.FirstOrDefault(ec => ec is TileLayerComponent) as TileLayerComponent;
-            var tsc = entityComponents.FirstOrDefault(ec => ec is TileSetComponent) as TileSetComponent;
-            if (tlc != null)
+            TileLayerComponent TileLayerComponent = null;
+            TileSetComponent TileSetComponent = null;
+
+            foreach (var component in entityComponents)
             {
-                // TODO: Should TileLayerComponent just replace its properties with the TileLayer object?
-                TileLayers.Add(tlc.LayerName, new TileLayer(tlc.Opacity, tlc.Visible, tlc.Width, tlc.Height, tlc.Tiles));
+                if (component.Name == "tilelayer")
+                {
+                    TileLayerComponent = (TileLayerComponent)component;
+                }
+                if (component.Name == "tileset")
+                {
+                    TileSetComponent = (TileSetComponent)component;
+                }
             }
-            if (tsc != null)
+            if (TileLayerComponent != null)
             {
-                var texture = Content.Load<Texture2D>(tsc.TexturePath);
-                TileSets.Add(tsc.FirstGid, new TileSet(texture, tsc.TileHeight, tsc.TileWidth));
+                this.TileLayers.Add(TileLayerComponent.LayerName, new TileLayerStruct(TileLayerComponent.Opacity, TileLayerComponent.Visible, TileLayerComponent.Width, TileLayerComponent.Height, TileLayerComponent.Tiles));
+            }
+            if (TileSetComponent != null)
+            {
+                var texture = Content.Load<Texture2D>(TileSetComponent.TexturePath);
+                this.TileSets.Add(TileSetComponent.FirstGid, new TileSetStruct(texture, TileSetComponent.TileHeight, TileSetComponent.TileWidth));
             }
         }
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            var cameraComponent = entityComponents.FirstOrDefault(ec => ec is CameraComponent) as CameraComponent;
-            var positionComponent = entityComponents.FirstOrDefault(ec => ec is PositionComponent) as PositionComponent;
-
-            if (cameraComponent == null || positionComponent == null) return;
-
-            this.CameraPosition = new Vector2(positionComponent.X, positionComponent.Y);
+            CameraComponent CameraComponent = null;
+            PositionComponent PositionComponent = null;
+            foreach (var component in entityComponents)
+            {
+                if (component.Name == "position")
+                {
+                    PositionComponent = (PositionComponent)component;
+                }
+                if (component.Name == "camera")
+                {
+                    CameraComponent = (CameraComponent)component;
+                }
+            }
+            if (CameraComponent != null && PositionComponent != null)
+            {
+                this.CameraPosition = new Vector2(PositionComponent.X, PositionComponent.Y);
+            }
         }
 
         public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
-            foreach (var layer in TileLayers.Values)
+            
+            foreach (var layer in this.TileLayers.Values)
+            {
                 if (layer.visible)
+                {
                     foreach (var tile in layer.tiles)
-                        RenderTile(spriteBatch, tile, layer);
-        }
+                    {
+                        var gid = tile.Item1;
+                        var x = tile.Item2;
+                        var y = tile.Item3;
+                        int tileSetKey = 1;
 
-        private void RenderTile(SpriteBatch spriteBatch, Tile tile, TileLayer layer)
-        {
-            var gid = tile.Gid;
-            var x = tile.X;
-            var y = tile.Y;
+                        if (tileSetKey != -1)
+                        {
+                            TileSetStruct tileSet = this.TileSets[tileSetKey];
+                            int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
+                            int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
 
-            // TODO: What were you trying to do here? you set it to 1 and then check if it's not -1 (it never would be) and then use it to get the tile set of 1 and that's it?
-            // There's always only one tile set and its key is always 1
-            int tileSetKey = 1;
-            if (tileSetKey == -1) return;
-            TileSet tileSet = this.TileSets[tileSetKey];
-            int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
-            int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
+                            int column = ((gid - 1) % tilesWide);
+                            int row = (int)Math.Floor((double)(gid - 1) / (double)tilesWide);
 
-            int column = (gid - 1) % tilesWide;
-            //you can add 'd' to constants to cast them to doubles...(int - double) / int => double *shrug* I just use resharper to tell me what to do with this one so don't take it personally if that went over your head
-            int row = (int)Math.Floor((gid - 1d) / tilesWide); //Why Math.Floor doesn't return an int I don't know
+                            Rectangle tilesetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
 
-            //new Rectangle(x,y,w,h)
-            Rectangle tileSetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
+                            int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
+                            int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
+                            offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
+                            offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
+                            int tileX = x * tileSet.tileWidth - offSetX;
+                            int tileY = y * tileSet.tileHeight - offSetY;
+                            
+                            if (offSetX > (32 * layer.width))
+                            {
+                                Console.WriteLine(offSetX);
+                            }
+                            Rectangle destRectangle = new Rectangle(tileX, tileY, tileSet.tileWidth, tileSet.tileHeight);
 
-            int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
-            int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
-            //TODO: Is clamp what is blocking the camera from going off the edges?
-            offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
-            offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
-            int tileX = x * tileSet.tileWidth - offSetX;
-            int tileY = y * tileSet.tileHeight - offSetY;
-
-            if (offSetX > 32 * layer.width)
-                Console.WriteLine(offSetX);
-
-            Rectangle destRectangle = new Rectangle(tileX, tileY, tileSet.tileWidth, tileSet.tileHeight);
-
-            spriteBatch.Draw(
-                tileSet.texture,
-                destRectangle,
-                tileSetRec,
-                Color.White
-            );
+                            spriteBatch.Draw(
+                                tileSet.texture,
+                                destRectangle,
+                                tilesetRec,
+                                Color.White
+                            );
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }

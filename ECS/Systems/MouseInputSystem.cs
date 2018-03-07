@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ECS.ECS;
 using ECS.Components;
 
 namespace ECS.Systems
@@ -29,14 +30,27 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            var mouseControlledComponent = entityComponents.FirstOrDefault(ec => ec is MouseControlledComponent) as MouseControlledComponent;
-            var positionComponent = entityComponents.FirstOrDefault(ec => ec is PositionComponent) as PositionComponent;
 
-            if (mouseControlledComponent == null || positionComponent == null) return;
+            MouseControlledComponent MouseControlledComponent = null;
+            PositionComponent PositionComponent = null;
 
-            MouseState mState = Mouse.GetState();
-            positionComponent.X = mState.Position.X;
-            positionComponent.Y = mState.Position.Y;
+            foreach (var component in entityComponents)
+            {
+                if (component.Name == "mouse_controlled")
+                {
+                    MouseControlledComponent = (MouseControlledComponent)component;
+                }
+                if (component.Name == "position")
+                {
+                    PositionComponent = (PositionComponent)(component);
+                }
+            }
+            if (MouseControlledComponent != null && PositionComponent != null)
+            {
+                MouseState mState = Mouse.GetState();
+                PositionComponent.X = mState.Position.X;
+                PositionComponent.Y = mState.Position.Y;
+            }
         }
 
         public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)

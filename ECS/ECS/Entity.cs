@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ECS.Components;
 
 namespace ECS.ECS
 {
@@ -13,7 +12,9 @@ namespace ECS.ECS
         {
             this.Components = new Dictionary<string, EntityComponent>();
             foreach (var component in components)
+            {
                 this.Components.Add(component.Name, component);
+            }
         }
 
         public void AddComponent(EntityComponent component)

@@ -4,48 +4,49 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using TiledSharp;
-using ECS.Systems;
-using ECS.Components;
 using ECS.ECS;
+using ECS.Components;
+using ECS.Systems;
 using ECS.Services;
 
 namespace ECS.Scenes
 {
     class DemoScene : Scene
     {
-        private Color backgroundColor = new Color(40, 53, 147);
-        private SpriteFont font;
-        private World world;
-        private TmxMap map;
-        private ILogger Logger;
+        private Color BackgroundColor = new Color(40, 53, 147);
+        private SpriteFont Font;
+        private World World;
+        TmxMap Map;
+        ILogger Logger;
 
         public DemoScene(string sceneName, bool isActive)
         {
             IsActive = isActive;
             SceneName = sceneName;
 
-            world = new World(); // A whole new world!!!
+            World = new World(); // A whole new world!!!
 
             // Setting up Tile Engine Entity
             
-            map = new TmxMap("../../../../TiledData/test.tmx"); // Loading TMX data
+            Map = new TmxMap("../../../../TiledData/test.tmx"); // Loading TMX data
             
             var tileLayerNames = new List<string>();
             var tileRenderSystem = new TileRenderSystem();
             
 
-            foreach (var tileset in map.Tilesets)
+            foreach (var tileset in Map.Tilesets)
             {
                 Console.WriteLine(tileset.Name);
-                world.AddEntity(new Entity(new List<EntityComponent> { new TileSetComponent(tileset) }));
+                World.AddEntity(new Entity(new List<EntityComponent> { new TileSetComponent(tileset) }));
                 Console.WriteLine("Creating tileset entity");
             }
             
-            foreach (var layer in map.Layers)
+            foreach (var layer in Map.Layers)
             {
-                world.AddEntity(new Entity(new List<EntityComponent> { new TileLayerComponent(layer, map.Width, map.Height) }));
+                World.AddEntity(new Entity(new List<EntityComponent> { new TileLayerComponent(layer, Map.Width, Map.Height) }));
                 tileLayerNames.Add(layer.Name);
             }
+            
 
             Console.WriteLine("Creating tilemap entity");
 
@@ -75,7 +76,7 @@ namespace ECS.Scenes
             var keyboardInputSystem = new KeyboardInputSystem();
             var renderSystem = new RenderSystem();
 
-            world.AddEntity(new Entity(new List<EntityComponent> { cameraComponent, velocityComponent, positionComponent, playerControlledComponent }));
+            World.AddEntity(new Entity(new List<EntityComponent> { cameraComponent, velocityComponent, positionComponent, playerControlledComponent }));
             // Setting up mouse cursor entity
             /*
             var cursorAppearanceComponent = new AppearanceComponent("cursor");
@@ -86,21 +87,20 @@ namespace ECS.Scenes
             World.AddEntity(new Entity(new List<EntityComponent> { cursorAppearanceComponent, cursorPositionComponent, mouseControlledComponent })); // Mouse cursor entity added
             */
             // Add the systems! Order MATTERS! YOU WOULDN'T DRAW A NOSE BEHIND A FACE WOULD YOU?
-            // If order matters then add a z-index?
-            world.AddSystems(new IEntitySystem [] { keyboardInputSystem, motionSystem, tileRenderSystem, renderSystem });
+            World.AddSystems(new List<IEntitySystem> { keyboardInputSystem, motionSystem, tileRenderSystem, renderSystem });
         }
 
         public override void Initialize()
         {
             Content = GameServices.GetService<ContentManager>();
             Logger = GameServices.GetService<ILogger>();
-            world.Initialize();
+            World.Initialize();
         }
 
         public override void LoadContent(SpriteBatch spriteBatch)
         {
-            font = Content.Load<SpriteFont>("sf-pixelate");
-            world.LoadContent(spriteBatch);
+            Font = Content.Load<SpriteFont>("sf-pixelate");
+            World.LoadContent(spriteBatch);
         }
 
         public override void UnloadContent()
@@ -110,14 +110,14 @@ namespace ECS.Scenes
 
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
+            World.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.GraphicsDevice.Clear(backgroundColor);
-            world.Draw(spriteBatch);
-            spriteBatch.DrawString(font, "Sandbox", new Vector2(20, 20), new Color(238, 238, 238));
+            spriteBatch.GraphicsDevice.Clear(BackgroundColor);
+            World.Draw(spriteBatch);
+            spriteBatch.DrawString(Font, "Sandbox", new Vector2(20, 20), new Color(238, 238, 238));
         }
     }
 }

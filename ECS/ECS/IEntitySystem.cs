@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ECS.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ECS.Systems
+namespace ECS.ECS
 {
     interface IEntitySystem
     {

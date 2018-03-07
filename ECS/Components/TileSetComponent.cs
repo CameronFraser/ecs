@@ -1,10 +1,11 @@
 ﻿using TiledSharp;
-using ECS.Systems;
+using ECS.ECS;
 
 namespace ECS.Components
 {
     class TileSetComponent : EntityComponent
     {
+        public override string Name { get; set; }
         public string TexturePath { get; set; }
         public int TileWidth { get; set; }
         public int TileHeight { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ECS.ECS;
 using ECS.Components;
 
 namespace ECS.Systems
@@ -32,25 +33,54 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            var velocityComponent = entityComponents.FirstOrDefault(ec => ec.Name == "velocity") as VelocityComponent;
-            var playerControlledComponent = entityComponents.FirstOrDefault(ec => ec.Name == "player_controlled") as PlayerControlledComponent;
+            VelocityComponent VelocityComponent = null;
+            PlayerControlledComponent PlayerControlledComponent = null;
 
-            if (velocityComponent == null || playerControlledComponent == null) return;
-            KeyboardState kState = Keyboard.GetState();
-            var x = 0;
-            var y = 0;
+            foreach (var component in entityComponents)
+            {
+                if (component.Name == "velocity")
+                {
+                    VelocityComponent = (VelocityComponent)component;
+                }
+                if (component.Name == "player_controlled")
+                {
+                    PlayerControlledComponent = (PlayerControlledComponent)(component);
+                }
+            }
 
-            if (kState.IsKeyDown(Keys.Left))
-                x = -1;
-            if (kState.IsKeyDown(Keys.Right))
-                x = 1;
-            if (kState.IsKeyDown(Keys.Up))
-                y = -1;
-            if (kState.IsKeyDown(Keys.Down))
-                y = 1;
+            if (VelocityComponent != null && PlayerControlledComponent != null)
+            {
+                KeyboardState kState = Keyboard.GetState();
+                var x = 0;
+                var y = 0;
 
-            velocityComponent.IsMoving = x != 0 || y != 0;
-            velocityComponent.Directions = new Vector2(x, y);
+                if (kState.IsKeyDown(Keys.Left))
+                {
+                    x = -1;
+                }
+                if (kState.IsKeyDown(Keys.Right))
+                {
+                    x = 1;
+                }
+                if (kState.IsKeyDown(Keys.Up))
+                {
+                    y = -1;
+                }
+                if (kState.IsKeyDown(Keys.Down))
+                {
+                    y = 1;
+                }
+
+                if (x == 0 && y == 0)
+                {
+                    VelocityComponent.IsMoving = false;
+                }
+                else
+                {
+                    VelocityComponent.Directions = new Vector2(x, y);
+                    VelocityComponent.IsMoving = true;
+                }
+            }
         }
 
         public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
