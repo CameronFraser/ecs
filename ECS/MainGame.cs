@@ -41,6 +41,7 @@ namespace ECS
             GameServices.AddService(GraphicsDevice);
             GameServices.AddService(Content);
             GameServices.AddService(Logger);
+            GameServices.AddService(Graphics);
             SceneManager.Initialize();
             base.Initialize();
         }

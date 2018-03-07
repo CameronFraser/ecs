@@ -9,11 +9,11 @@ using ECS.Components;
 
 namespace ECS.Systems
 {
-    class MouseInput : IEntitySystem
+    class MouseInputSystem : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
 
-        public MouseInput()
+        public MouseInputSystem()
         {
             this.ComponentNames = new List<string> { "mouse_controlled", "position" };
         }
@@ -31,18 +31,18 @@ namespace ECS.Systems
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
 
-            MouseControlled MouseControlledComponent = null;
-            Position PositionComponent = null;
+            MouseControlledComponent MouseControlledComponent = null;
+            PositionComponent PositionComponent = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "mouse_controlled")
                 {
-                    MouseControlledComponent = (MouseControlled)component;
+                    MouseControlledComponent = (MouseControlledComponent)component;
                 }
                 if (component.Name == "position")
                 {
-                    PositionComponent = (Position)(component);
+                    PositionComponent = (PositionComponent)(component);
                 }
             }
             if (MouseControlledComponent != null && PositionComponent != null)

@@ -12,13 +12,13 @@ namespace ECS.Systems
     /// <summary>
     /// Renders enitities that have the appearance and position components
     /// </summary>
-    class Render : IEntitySystem
+    class RenderSystem : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
         private Dictionary<Guid, Tuple<Vector2, Texture2D>> Renderables; // Dunno if tuple was the right choice, just need data holders I can make on the fly
         private ContentManager Content;
 
-        public Render()
+        public RenderSystem()
         {
             this.ComponentNames = new List<string> { "appearance", "position" };
             this.Renderables = new Dictionary<Guid, Tuple<Vector2, Texture2D>>();
@@ -39,20 +39,20 @@ namespace ECS.Systems
         /// <param name="spriteBatch"></param>
         public void LoadContent(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
         {
-            Appearance AppearanceComponent = null;
-            Position PositionComponent = null;
+            AppearanceComponent AppearanceComponent = null;
+            PositionComponent PositionComponent = null;
             Texture2D texture = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "appearance")
                 {
-                    AppearanceComponent = (Appearance)component;
+                    AppearanceComponent = (AppearanceComponent)component;
                     texture = Content.Load<Texture2D>(AppearanceComponent.TexturePath);
                 }
                 if (component.Name == "position")
                 {
-                    PositionComponent = (Position)component;
+                    PositionComponent = (PositionComponent)component;
                 }
             }
             if (AppearanceComponent != null && PositionComponent != null)
@@ -69,18 +69,18 @@ namespace ECS.Systems
         /// <param name="gameTime">Time passed since last time draw was called</param>
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            Appearance AppearanceComponent = null;
-            Position PositionComponent = null;
+            AppearanceComponent AppearanceComponent = null;
+            PositionComponent PositionComponent = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "appearance")
                 {
-                    AppearanceComponent = (Appearance)component;
+                    AppearanceComponent = (AppearanceComponent)component;
                 }
                 if (component.Name == "position")
                 {
-                    PositionComponent = (Position)component;
+                    PositionComponent = (PositionComponent)component;
                 }
             }
 
@@ -102,7 +102,9 @@ namespace ECS.Systems
             {
                 if (renderable.Item2 != null && renderable.Item2 != null)
                 {
-                    spriteBatch.Draw(renderable.Item2, renderable.Item1, Color.White);
+                    Vector2 position = renderable.Item1;
+                    Vector2 adjustedPosition = new Vector2(position.X + renderable.Item2.Width / 2, position.Y + renderable.Item2.Height / 2);
+                    spriteBatch.Draw(renderable.Item2, adjustedPosition, Color.White);
                 }
             }
         }

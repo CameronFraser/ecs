@@ -4,14 +4,14 @@ using ECS.ECS;
 
 namespace ECS.Components
 {
-    class Velocity : EntityComponent
+    class VelocityComponent : EntityComponent
     {
         public override string Name { get; set; }
         public Vector2 Directions;
         public int Speed;
         public bool IsMoving;
 
-        public Velocity(int speed, Vector2 directions)
+        public VelocityComponent(int speed, Vector2 directions)
         {
             this.Name = "velocity";
             this.IsMoving = false;

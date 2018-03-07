@@ -12,11 +12,11 @@ namespace ECS.Systems
     /// Checks if entity is moving and its direction. Will adjust the entities position component values
     /// based on the velocity
     /// </summary>
-    class Motion : IEntitySystem
+    class MotionSystem : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
 
-        public Motion()
+        public MotionSystem()
         {
             this.ComponentNames = new List<string> { "velocity", "position" };
         }
@@ -33,18 +33,18 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            Velocity VelocityComponent = null;
-            Position PositionComponent = null;
+            VelocityComponent VelocityComponent = null;
+            PositionComponent PositionComponent = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "velocity")
                 {
-                    VelocityComponent = (Velocity)component;
+                    VelocityComponent = (VelocityComponent)component;
                 }
                 if (component.Name == "position")
                 {
-                    PositionComponent = (Position)component;
+                    PositionComponent = (PositionComponent)component;
                 }
             }
             if (VelocityComponent != null && PositionComponent != null)

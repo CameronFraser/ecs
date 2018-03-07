@@ -12,11 +12,11 @@ namespace ECS.Systems
     /// <summary>
     /// Reads player input and updates relevant components
     /// </summary>
-    class KeyboardPlayerInput : IEntitySystem
+    class KeyboardInputSystem : IEntitySystem
     {
         public List<string> ComponentNames { get; set; }
 
-        public KeyboardPlayerInput()
+        public KeyboardInputSystem()
         {
             this.ComponentNames = new List<string> { "player_controlled", "velocity" };
         }
@@ -33,18 +33,18 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            Velocity VelocityComponent = null;
-            PlayerControlled PlayerControlledComponent = null;
+            VelocityComponent VelocityComponent = null;
+            PlayerControlledComponent PlayerControlledComponent = null;
 
             foreach (var component in entityComponents)
             {
                 if (component.Name == "velocity")
                 {
-                    VelocityComponent = (Velocity)component;
+                    VelocityComponent = (VelocityComponent)component;
                 }
                 if (component.Name == "player_controlled")
                 {
-                    PlayerControlledComponent = (PlayerControlled)(component);
+                    PlayerControlledComponent = (PlayerControlledComponent)(component);
                 }
             }
 

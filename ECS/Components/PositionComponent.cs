@@ -2,13 +2,13 @@
 
 namespace ECS.Components
 {
-    class Position : EntityComponent
+    class PositionComponent : EntityComponent
     {
         public override string Name { get; set; }
         public int X;
         public int Y;
 
-        public Position(int x, int y)
+        public PositionComponent(int x, int y)
         {
             this.Name = "position";
             this.X = x;

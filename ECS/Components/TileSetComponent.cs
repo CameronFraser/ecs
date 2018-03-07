@@ -3,7 +3,7 @@ using ECS.ECS;
 
 namespace ECS.Components
 {
-    class TileSet : EntityComponent
+    class TileSetComponent : EntityComponent
     {
         public override string Name { get; set; }
         public string TexturePath { get; set; }
@@ -11,7 +11,7 @@ namespace ECS.Components
         public int TileHeight { get; set; }
         public int FirstGid { get; set; }
 
-        public TileSet(TmxTileset tileSet)
+        public TileSetComponent(TmxTileset tileSet)
         {
             this.Name = "tileset";
             this.TexturePath = tileSet.Name;

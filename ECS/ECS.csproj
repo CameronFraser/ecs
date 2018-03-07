@@ -59,13 +59,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components\Appearance.cs" />
-    <Compile Include="Components\MouseControlled.cs" />
-    <Compile Include="Components\Position.cs" />
-    <Compile Include="Components\PlayerControlled.cs" />
-    <Compile Include="Components\TileLayer.cs" />
-    <Compile Include="Components\TileSet.cs" />
-    <Compile Include="Components\Velocity.cs" />
+    <Compile Include="Components\AppearanceComponent.cs" />
+    <Compile Include="Components\CameraComponent.cs" />
+    <Compile Include="Components\MouseControlledComponent.cs" />
+    <Compile Include="Components\PositionComponent.cs" />
+    <Compile Include="Components\PlayerControlledComponent.cs" />
+    <Compile Include="Components\TileLayerComponent.cs" />
+    <Compile Include="Components\TileSetComponent.cs" />
+    <Compile Include="Components\VelocityComponent.cs" />
     <Compile Include="ECS\EntityComponent.cs" />
     <Compile Include="ECS\Entity.cs" />
     <Compile Include="ECS\IEntitySystem.cs" />
@@ -82,11 +83,11 @@
     <Compile Include="ECS\World.cs" />
     <Compile Include="Services\ConsoleLogger.cs" />
     <Compile Include="Services\ILogger.cs" />
-    <Compile Include="Systems\Motion.cs" />
-    <Compile Include="Systems\KeyboardPlayerInput.cs" />
-    <Compile Include="Systems\MouseInput.cs" />
-    <Compile Include="Systems\Render.cs" />
-    <Compile Include="Systems\TileRender.cs" />
+    <Compile Include="Systems\MotionSystem.cs" />
+    <Compile Include="Systems\KeyboardInputSystem.cs" />
+    <Compile Include="Systems\MouseInputSystem.cs" />
+    <Compile Include="Systems\RenderSystem.cs" />
+    <Compile Include="Systems\TileRenderSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -154,7 +155,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Content\SFPixelate.ttf" />
-    <None Include="TiledData\test.tmx" />
+    <None Include="TiledData\test.tmx">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
