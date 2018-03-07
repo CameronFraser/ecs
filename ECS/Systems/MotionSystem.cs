@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using ECS.ECS;
-using System.Linq;
 using ECS.Components;
 
 namespace ECS.Systems
@@ -33,33 +32,15 @@ namespace ECS.Systems
 
         public void Update(List<EntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
-            VelocityComponent VelocityComponent = null;
-            PositionComponent PositionComponent = null;
+            //instead of using the name == you could use 'is'
+            var velocityComponent = entityComponents.FirstOrDefault(ec => ec is VelocityComponent) as VelocityComponent;
+            var positionComponent = entityComponents.FirstOrDefault(ec => ec is PositionComponent) as PositionComponent;
 
-            foreach (var component in entityComponents)
-            {
-                if (component.Name == "velocity")
-                {
-                    VelocityComponent = (VelocityComponent)component;
-                }
-                if (component.Name == "position")
-                {
-                    PositionComponent = (PositionComponent)component;
-                }
-            }
-            if (VelocityComponent != null && PositionComponent != null)
-            {
-                if (VelocityComponent.IsMoving)
-                {
-                    Vector2 directions = VelocityComponent.Directions;
-                    // Monogame coordinate system has the (0,0) origin in the upper left hand corner
-                    PositionComponent.Y += (int)directions.Y * VelocityComponent.Speed;
-                    PositionComponent.X += (int)directions.X * VelocityComponent.Speed;
-                }
-            }
-            
-
-
+            if (velocityComponent == null || positionComponent == null || !velocityComponent.IsMoving) return;
+            var directions = velocityComponent.Directions;
+            // Monogame coordinate system has the (0,0) origin in the upper left hand corner
+            positionComponent.Y += (int)directions.Y * velocityComponent.Speed;
+            positionComponent.X += (int)directions.X * velocityComponent.Speed;
         }
 
         public void Draw(List<EntityComponent> entityComponents, Guid entityId, SpriteBatch spriteBatch)
