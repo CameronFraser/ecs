@@ -23,7 +23,7 @@ namespace ECS.ECS
        
         public void Initialize()
         {
-            List<IEntityComponent> entityComponents, components;
+            List<EntityComponent> entityComponents, components;
 
             foreach (var entity in this.Entities.Values)
             {
@@ -31,14 +31,17 @@ namespace ECS.ECS
                 foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Initialize(components, entity.Id);
+                    if (components.Count > 0)
+                    {
+                        system.Initialize(components, entity.Id);
+                    }
                 }
             }
         }
 
         public void LoadContent(SpriteBatch spriteBatch)
         {
-            List<IEntityComponent> entityComponents, components;
+            List<EntityComponent> entityComponents, components;
 
             foreach (var entity in this.Entities.Values)
             {
@@ -46,7 +49,10 @@ namespace ECS.ECS
                 foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.LoadContent(components, entity.Id, spriteBatch);
+                    if (components.Count > 0)
+                    {
+                        system.LoadContent(components, entity.Id, spriteBatch);
+                    }
                 }
             }
         }
@@ -80,7 +86,7 @@ namespace ECS.ECS
 
         public void Update(GameTime gameTime)
         {
-            List<IEntityComponent> entityComponents, components;
+            List<EntityComponent> entityComponents, components;
 
             foreach (var entity in this.Entities.Values)
             {
@@ -88,14 +94,17 @@ namespace ECS.ECS
                 foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Update(components, entity.Id, gameTime);
+                    if (components.Count > 0)
+                    {
+                        system.Update(components, entity.Id, gameTime);
+                    } 
                 }
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            List<IEntityComponent> entityComponents, components;
+            List<EntityComponent> entityComponents, components;
 
             foreach (var entity in this.Entities.Values)
             {
@@ -103,7 +112,10 @@ namespace ECS.ECS
                 foreach (var system in this.Systems)
                 {
                     components = entityComponents.Where(component => system.ComponentNames.Contains(component.Name)).ToList();
-                    system.Draw(components, entity.Id, spriteBatch);
+                    if (components.Count > 0)
+                    {
+                        system.Draw(components, entity.Id, spriteBatch);
+                    }
                 }
             }
         }
