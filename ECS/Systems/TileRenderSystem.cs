@@ -113,6 +113,18 @@ namespace ECS.Systems
             if (CameraComponent != null && PositionComponent != null)
             {
                 this.CameraPosition = new Vector2(PositionComponent.X, PositionComponent.Y);
+                foreach (var layer in this.TileLayers.Values)
+                {
+                    if (layer.visible)
+                    {
+                        int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
+                        int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
+                        offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
+                        offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
+                        PositionComponent.X = offSetX - (Graphics.PreferredBackBufferWidth / 2);
+                        PositionComponent.Y = offSetY - (Graphics.PreferredBackBufferHeight / 2);
+                    }
+                }
             }
         }
 
@@ -123,44 +135,37 @@ namespace ECS.Systems
             {
                 if (layer.visible)
                 {
+                    TileSetStruct tileSet = this.TileSets[1];
+                    int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
+                    int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
+                    offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
+                    offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
+
                     foreach (var tile in layer.tiles)
                     {
                         var gid = tile.Item1;
                         var x = tile.Item2;
                         var y = tile.Item3;
-                        int tileSetKey = 1;
 
-                        if (tileSetKey != -1)
-                        {
-                            TileSetStruct tileSet = this.TileSets[tileSetKey];
-                            int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
-                            int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
+                        int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
+                        int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
 
-                            int column = ((gid - 1) % tilesWide);
-                            int row = (int)Math.Floor((double)(gid - 1) / (double)tilesWide);
+                        int column = ((gid - 1) % tilesWide);
+                        int row = (int)Math.Floor((double)(gid - 1) / (double)tilesWide);
+                        int tileX = x * tileSet.tileWidth - offSetX;
+                        int tileY = y * tileSet.tileHeight - offSetY;
 
-                            Rectangle tilesetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
+                        Rectangle tilesetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
 
-                            int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
-                            int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
-                            offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
-                            offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
-                            int tileX = x * tileSet.tileWidth - offSetX;
-                            int tileY = y * tileSet.tileHeight - offSetY;
-                            
-                            if (offSetX > (32 * layer.width))
-                            {
-                                Console.WriteLine(offSetX);
-                            }
-                            Rectangle destRectangle = new Rectangle(tileX, tileY, tileSet.tileWidth, tileSet.tileHeight);
 
-                            spriteBatch.Draw(
-                                tileSet.texture,
-                                destRectangle,
-                                tilesetRec,
-                                Color.White
-                            );
-                        }
+                        Rectangle destRectangle = new Rectangle(tileX, tileY, tileSet.tileWidth, tileSet.tileHeight);
+
+                        spriteBatch.Draw(
+                            tileSet.texture,
+                            destRectangle,
+                            tilesetRec,
+                            Color.White
+                        );
                     }
                 }
             }
