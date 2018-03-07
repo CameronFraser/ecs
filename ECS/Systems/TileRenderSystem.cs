@@ -15,6 +15,8 @@ namespace ECS.Systems
         public Dictionary<string, TileLayerStruct> TileLayers { get; set; }
         public Dictionary<int, TileSetStruct> TileSets { get; set; }
         public Vector2 CameraPosition { get; set; }
+        public int OffsetX { get; set; }
+        public int OffsetY { get; set; }
         public string LastLog = "";
 
         private ContentManager Content;
@@ -117,12 +119,10 @@ namespace ECS.Systems
                 {
                     if (layer.visible)
                     {
-                        int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
-                        int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
-                        offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
-                        offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
-                        PositionComponent.X = offSetX - (Graphics.PreferredBackBufferWidth / 2);
-                        PositionComponent.Y = offSetY - (Graphics.PreferredBackBufferHeight / 2);
+                        this.OffsetY = MathHelper.Clamp((int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2), 0, 32 * layer.height - Graphics.PreferredBackBufferHeight); ;
+                        this.OffsetX = MathHelper.Clamp((int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2), 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
+                        PositionComponent.X = this.OffsetX - (Graphics.PreferredBackBufferWidth / 2);
+                        PositionComponent.Y = this.OffsetY - (Graphics.PreferredBackBufferHeight / 2);
                     }
                 }
             }
@@ -136,10 +136,8 @@ namespace ECS.Systems
                 if (layer.visible)
                 {
                     TileSetStruct tileSet = this.TileSets[1];
-                    int offSetX = (int)this.CameraPosition.X + (Graphics.PreferredBackBufferWidth / 2);
-                    int offSetY = (int)this.CameraPosition.Y + (Graphics.PreferredBackBufferHeight / 2);
-                    offSetX = MathHelper.Clamp(offSetX, 0, 32 * layer.width - Graphics.PreferredBackBufferWidth);
-                    offSetY = MathHelper.Clamp(offSetY, 0, 32 * layer.height - Graphics.PreferredBackBufferHeight);
+                    int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
+                    int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
 
                     foreach (var tile in layer.tiles)
                     {
@@ -147,13 +145,11 @@ namespace ECS.Systems
                         var x = tile.Item2;
                         var y = tile.Item3;
 
-                        int tilesHigh = tileSet.texture.Height / tileSet.tileHeight;
-                        int tilesWide = tileSet.texture.Width / tileSet.tileWidth;
-
                         int column = ((gid - 1) % tilesWide);
                         int row = (int)Math.Floor((double)(gid - 1) / (double)tilesWide);
-                        int tileX = x * tileSet.tileWidth - offSetX;
-                        int tileY = y * tileSet.tileHeight - offSetY;
+
+                        int tileX = x * tileSet.tileWidth - this.OffsetX;
+                        int tileY = y * tileSet.tileHeight - this.OffsetY;
 
                         Rectangle tilesetRec = new Rectangle(tileSet.tileWidth * column, tileSet.tileHeight * row, tileSet.tileWidth, tileSet.tileHeight);
 
