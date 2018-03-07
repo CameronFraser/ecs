@@ -1,6 +1,4 @@
-﻿using ECS.ECS;
-
-namespace ECS.Components
+﻿namespace ECS.Components
 {
     /// <summary>
     /// Determines if entity is controlled by keyboard or gamepad input
@@ -8,8 +6,6 @@ namespace ECS.Components
     /// </summary>
     class PlayerControlledComponent : EntityComponent
     {
-        public override string Name { get; set; }
-
         public PlayerControlledComponent()
         {
             this.Name = "player_controlled";

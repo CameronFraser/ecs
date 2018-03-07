@@ -1,10 +1,7 @@
-﻿using ECS.ECS;
-
-namespace ECS.Components
+﻿namespace ECS.Components
 {
     class PositionComponent : EntityComponent
     {
-        public override string Name { get; set; }
         public int X;
         public int Y;
 

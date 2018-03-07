@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System;
+using System.Linq;
 using TiledSharp;
-using ECS.ECS;
 
 namespace ECS.Components
 {
     class TileLayerComponent : EntityComponent
     {
-        public override string Name { get; set; }
         public string LayerName { get; set; }
         public double? OffsetX { get; set; }
         public double? OffsetY { get; set; }
@@ -15,7 +13,7 @@ namespace ECS.Components
         public bool Visible { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public List<Tuple<int, int, int>> Tiles { get; set; }
+        public List<Tile> Tiles { get; set; }
 
         public TileLayerComponent(TmxLayer layer, int width, int height)
         {
@@ -28,12 +26,7 @@ namespace ECS.Components
             this.Width = width;
             this.Height = height;
 
-            this.Tiles = new List<Tuple<int, int, int>>();
-
-            foreach (var tile in layer.Tiles)
-            {
-                this.Tiles.Add(new Tuple<int, int, int>(tile.Gid, tile.X, tile.Y));
-            }
+            this.Tiles = layer.Tiles.Select(t => new Tile { Gid = t.Gid, X = t.X, Y = t.Y }).ToList();
         }
     }
 }
