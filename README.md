@@ -1,3 +1,5 @@
+### Not intended for usage, this was a toy implementation I used for learning
+
 # ECS/Scene Management Implementation
 Entity-Component-System + Scene Management for Monogame
 
@@ -14,5 +16,3 @@ Entity-Component-System + Scene Management for Monogame
 Only the scene management exists currently. If you run the app there are some demo scenes set up
 that only contain a background. By clicking on the window you will change scenes.
 
-## TO-DO
-https://github.com/defdata/ecs/projects/1
