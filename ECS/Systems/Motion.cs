@@ -34,10 +34,10 @@ namespace ECS.Systems
         public void Update(List<IEntityComponent> entityComponents, Guid entityId, GameTime gameTime)
         {
             try {
-                Velocity velocityComponent = (Velocity)entityComponents.Where(component => component.Name == "velocity").Single();
-                Position positionComponent = (Position)entityComponents.Where(component => component.Name == "position").Single();
+                Velocity velocityComponent = (Velocity)entityComponents.SingleOrDefault(component => component.Name == "velocity");
+                Position positionComponent = (Position)entityComponents.SingleOrDefault(component => component.Name == "position");
 
-                if (velocityComponent.IsMoving)
+                if (velocityComponent != null && positionComponent != null && velocityComponent.IsMoving)
                 {
                     Vector2 directions = velocityComponent.Directions;
                     // Monogame coordinate system has the (0,0) origin in the upper left hand corner
